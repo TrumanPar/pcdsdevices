@@ -5,9 +5,10 @@ This module contains classes related to the TMO-DREAM Motion System
 """
 
 from ophyd import Component as Cpt
+from ophyd import FormattedComponent as FCpt
 
 from .device import GroupDevice
-from .epics_motor import BeckhoffAxis
+from .epics_motor import BeckhoffAxis, SmarAct
 from .interface import BaseInterface
 
 
@@ -97,3 +98,40 @@ class DREAM_GasNozzle(BaseInterface, GroupDevice):
     gas_nozzle_x = Cpt(BeckhoffAxis, ':MMS:X', kind='normal')
     gas_nozzle_y = Cpt(BeckhoffAxis, ':MMS:Y', kind='normal')
     gas_nozzle_z = Cpt(BeckhoffAxis, ':MMS:Z', kind='normal')
+
+
+class DREAM_Hexapod(BaseInterface, GroupDevice):
+    """
+    DREAM Motion Class
+    This class controls hexapod X,Y, Z, and Ret motors fixed to the DREAM Motion system for the
+    DREAM endstation in TMO.
+
+    Parameters
+    ----------
+    prefix : str
+        TMO:DREAM:MCS2:01
+
+    dgpd_x : str
+        The MCS2 channel for the X stage
+
+    dgpd_y : str
+        The MCS2 channel for the Y stage
+
+    dgpd_z : str
+        The MCS2 channel for the Z stage
+
+    dgpd_ret : str
+        The MCS2 channel for the Ret stage
+
+    name : str, keyword-only
+        Alias for the device
+    """
+    # UI representation
+    _icon = 'fa.minus-square'
+    tab_component_names = True
+
+    # Motor components
+    dgpd_x = FCpt(SmarAct, '{prefix}{dgpd_x}', kind='normal')
+    dgpd_y = FCpt(SmarAct, '{prefix}{dgpd_y}', kind='normal')
+    dgpd_z = FCpt(SmarAct, '{prefix}{dgpd_z}', kind='normal')
+    dgpd_ret = FCpt(SmarAct, '{prefix}{dgpd_ret}', kind='normal')
