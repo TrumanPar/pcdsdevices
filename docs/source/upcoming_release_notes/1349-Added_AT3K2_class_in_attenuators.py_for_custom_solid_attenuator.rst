@@ -1,4 +1,4 @@
-1321 cvmi-bootstrap
+1349 Added AT3K2 class in attenuators.py for custom solid attenuator
 #################
 
 API Breaks
@@ -11,12 +11,11 @@ Library Features
 
 Device Features
 ---------------
-- Add ``cvmi_bootstrap`` module for the special CVMI RP bootstrapping experiment.
-  Rename the four axis names per request from scientists and remove three axes.
+- N/A
 
 New Devices
 -----------
-- N/A
+- AT3K2 Custom Solid Attenuator w/ 2 blades and 8 filters on each blade.
 
 Bugfixes
 --------
@@ -28,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- @tongju12
+- jozamudi

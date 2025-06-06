@@ -1,5 +1,5 @@
-1319 bug_preset_error
-#####################
+1352 hide-pa1k4-targets
+#################
 
 API Breaks
 ----------
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- N/A
+- For ``PA1K4`` (`CalibrationAxis`), change target count from 7 to 5 to hide targets 6 and 7
 
 New Devices
 -----------
@@ -19,7 +19,7 @@ New Devices
 
 Bugfixes
 --------
-- Improves error handling for presets when the position is unknown or uninitialized.
+- N/A
 
 Maintenance
 -----------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- tangkong
+- tongju12
