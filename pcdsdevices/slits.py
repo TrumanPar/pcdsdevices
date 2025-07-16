@@ -23,7 +23,7 @@ from ophyd import FormattedComponent as FCpt
 from ophyd.ophydobj import OphydObject
 from ophyd.pv_positioner import PVPositioner
 from ophyd.signal import Signal, SignalRO
-from ophyd.status import Status
+from ophyd.status import Status, AndStatus
 from ophyd.status import wait as status_wait
 
 from .analog_signals import FDQ
@@ -32,7 +32,7 @@ from .device import GroupDevice
 from .device import UpdateComponent as UpCpt
 from .digital_signals import J120K
 from .epics_motor import (BeckhoffAxis, BeckhoffAxisNoOffset, EpicsMotor,
-                          PCDSMotorBase)
+                          PCDSMotorBase, SmarAct)
 from .interface import (BaseInterface, FltMvInterface, LightpathInOutCptMixin,
                         LightpathMixin, MvInterface)
 from .pmps import TwinCATStatePMPS
@@ -733,3 +733,223 @@ class JJSlits(SlitsBase):
     ywidth = Cpt(BeckhoffAxis, ':YWIDTH', kind='normal')
     xcenter = Cpt(BeckhoffAxis, ':XCENTER', kind='normal')
     ycenter = Cpt(BeckhoffAxis, ':YCENTER', kind='normal')
+
+
+class SmaractSlitPositioner(FltMvInterface, PVPositioner):
+    """
+    Slit positioner that converts slit geometry to individual motor positions.
+
+    This replaces the PLC logic from BeckhoffSlitPositioner with Python calculations.
+    """
+
+    # Use signals for readback/setpoint since we calculate these in Python
+    readback = Cpt(Signal, kind='normal')
+    setpoint = Cpt(Signal, kind='normal')
+
+    # These will be set by the parent slit class
+    _motor_north = None
+    _motor_south = None
+    _motor_top = None
+    _motor_bottom = None
+
+    def __init__(self, prefix, *, slit_type="", **kwargs):
+        self.slit_type = slit_type
+        super().__init__(prefix, **kwargs)
+
+        # Initialize readback to current calculated position
+        self.readback.put(self._calculate_current_position())
+
+    def _calculate_current_position(self):
+        """Calculate current position based on motor readbacks"""
+        if self.slit_type == "XWIDTH":
+            # Width = distance between north and south blades
+            if self._motor_north and self._motor_south:
+                north_pos = self._motor_north.position
+                south_pos = self._motor_south.position
+                return abs(north_pos - south_pos)
+        elif self.slit_type == "YWIDTH":
+            # Height = distance between top and bottom blades
+            if self._motor_top and self._motor_bottom:
+                top_pos = self._motor_top.position
+                bottom_pos = self._motor_bottom.position
+                return abs(top_pos - bottom_pos)
+        elif self.slit_type == "XCENTER":
+            # X center = midpoint between north and south blades
+            if self._motor_north and self._motor_south:
+                north_pos = self._motor_north.position
+                south_pos = self._motor_south.position
+                return (north_pos + south_pos) / 2
+        elif self.slit_type == "YCENTER":
+            # Y center = midpoint between top and bottom blades
+            if self._motor_top and self._motor_bottom:
+                top_pos = self._motor_top.position
+                bottom_pos = self._motor_bottom.position
+                return (top_pos + bottom_pos) / 2
+        return 0.0
+
+    def _update_readback(self):
+        """Update readback signal with calculated position"""
+        current_pos = self._calculate_current_position()
+        self.readback.put(current_pos)
+
+    def _setup_move(self, position):
+        """
+        Setup and execute the move to the target position.
+
+        This is called by PVPositioner when a move is requested.
+        Returns a status object representing the move.
+        """
+        # Update our setpoint
+        self.setpoint.put(position)
+
+        # Get current geometry for all axes
+        current_xwidth = self.parent.xwidth._calculate_current_position()
+        current_ywidth = self.parent.ywidth._calculate_current_position()
+        current_xcenter = self.parent.xcenter._calculate_current_position()
+        current_ycenter = self.parent.ycenter._calculate_current_position()
+
+        # Update the parameter we're changing
+        if self.slit_type == "XWIDTH":
+            target_xwidth = position
+            target_ywidth = current_ywidth
+            target_xcenter = current_xcenter
+            target_ycenter = current_ycenter
+        elif self.slit_type == "YWIDTH":
+            target_xwidth = current_xwidth
+            target_ywidth = position
+            target_xcenter = current_xcenter
+            target_ycenter = current_ycenter
+        elif self.slit_type == "XCENTER":
+            target_xwidth = current_xwidth
+            target_ywidth = current_ywidth
+            target_xcenter = position
+            target_ycenter = current_ycenter
+        elif self.slit_type == "YCENTER":
+            target_xwidth = current_xwidth
+            target_ywidth = current_ywidth
+            target_xcenter = current_xcenter
+            target_ycenter = position
+        else:
+            raise ValueError(f"Unknown slit_type: {self.slit_type}")
+
+        # Calculate individual motor positions (replicating PLC FB_SLITS logic)
+        north_pos, south_pos, top_pos, bottom_pos = self._calculate_motor_positions(
+            target_xwidth, target_ywidth, target_xcenter, target_ycenter
+        )
+
+        # Move all motors that need to move for this axis
+        statuses = []
+
+        if self.slit_type in ("XWIDTH", "XCENTER"):
+            # X movement affects north/south motors
+            if self._motor_north:
+                statuses.append(self._motor_north.move(north_pos, wait=False))
+            if self._motor_south:
+                statuses.append(self._motor_south.move(south_pos, wait=False))
+
+        if self.slit_type in ("YWIDTH", "YCENTER"):
+            # Y movement affects top/bottom motors
+            if self._motor_top:
+                statuses.append(self._motor_top.move(top_pos, wait=False))
+            if self._motor_bottom:
+                statuses.append(self._motor_bottom.move(bottom_pos, wait=False))
+
+        # Combine all move statuses
+        if statuses:
+            combined_status = AndStatus(*statuses)
+
+            # Add callback to update readback when move is complete
+            combined_status.add_callback(self._update_readback)
+
+            return combined_status
+        else:
+            # No motors to move - create a finished status
+            self._update_readback()
+            status = Status()
+            status.set_finished()
+            return status
+
+    def _calculate_motor_positions(self, width_x, width_y, center_x, center_y):
+        """
+        Calculate individual motor positions from slit geometry.
+
+        This replicates the PLC FB_SLITS function block logic:
+        fPosNorthBlade := rReqCenterX + rReqApertureSizeX/2 + rEncoderOffsetNorth;
+        fPosSouthBlade := rReqCenterX - rReqApertureSizeX/2 + rEncoderOffsetSouth;
+        fPosTopBlade := rReqCenterY + rReqApertureSizeY/2 + rEncoderOffsetTop;
+        fPosBottomBlade := rReqCenterY - rReqApertureSizeY/2 + rEncoderOffsetBottom;
+        """
+        # Get offset values
+        north_offset = getattr(self.parent, 'north_offset', Signal(value=0.0)).get()
+        south_offset = getattr(self.parent, 'south_offset', Signal(value=0.0)).get()
+        top_offset = getattr(self.parent, 'top_offset', Signal(value=0.0)).get()
+        bottom_offset = getattr(self.parent, 'bottom_offset', Signal(value=0.0)).get()
+
+        # Calculate motor positions
+        north_pos = center_x + width_x/2 + north_offset
+        south_pos = center_x - width_x/2 + south_offset
+        top_pos = center_y + width_y/2 + top_offset
+        bottom_pos = center_y - width_y/2 + bottom_offset
+
+        return north_pos, south_pos, top_pos, bottom_pos
+
+    def stop(self, *, success=False):
+        """Stop all relevant motors"""
+        if self.slit_type in ("XWIDTH", "XCENTER"):
+            if self._motor_north:
+                self._motor_north.stop()
+            if self._motor_south:
+                self._motor_south.stop()
+
+        if self.slit_type in ("YWIDTH", "YCENTER"):
+            if self._motor_top:
+                self._motor_top.stop()
+            if self._motor_bottom:
+                self._motor_bottom.stop()
+
+
+class SmaractSlits(SlitsBase):
+    """
+    Smaract-based slit implementation.
+
+    Uses individual Smaract motor IOCs instead of coordinated PLC moves.
+    Replicates the BeckhoffSlits interface but with Python-based coordination.
+    """
+
+    # Slit positioners - use our custom Smaract positioner
+    xwidth = Cpt(SmaractSlitPositioner, '', slit_type='XWIDTH', kind='hinted')
+    ywidth = Cpt(SmaractSlitPositioner, '', slit_type='YWIDTH', kind='hinted')
+    xcenter = Cpt(SmaractSlitPositioner, '', slit_type='XCENTER', kind='normal')
+    ycenter = Cpt(SmaractSlitPositioner, '', slit_type='YCENTER', kind='normal')
+
+    # Raw motors - individual Smaract motor IOCs
+    top = Cpt(SmarAct, ':TOP', kind='normal')
+    bottom = Cpt(SmarAct, ':BOTTOM', kind='normal')
+    north = Cpt(SmarAct, ':NORTH', kind='normal')
+    south = Cpt(SmarAct, ':SOUTH', kind='normal')
+
+    # Offset parameters (equivalent to PLC encoder offsets)
+    # These can be set to calibrate the slit zero positions
+    north_offset = Cpt(Signal, value=0.0, kind='config')
+    south_offset = Cpt(Signal, value=0.0, kind='config')
+    top_offset = Cpt(Signal, value=0.0, kind='config')
+    bottom_offset = Cpt(Signal, value=0.0, kind='config')
+
+    # Lightpath configuration (uses position property now instead of readback)
+    lightpath_cpts = ['xwidth.position', 'ywidth.position']
+
+    def __init__(self, prefix, *, name, **kwargs):
+        super().__init__(prefix, name=name, nominal_aperture=3, **kwargs)
+
+        # Link motors to all positioners so they can calculate positions
+        for positioner in [self.xwidth, self.ywidth, self.xcenter, self.ycenter]:
+            positioner._motor_north = self.north
+            positioner._motor_south = self.south
+            positioner._motor_top = self.top
+            positioner._motor_bottom = self.bottom
+
+        # Set up convenience aliases (matching BeckhoffSlits)
+        self.hg = self.xwidth
+        self.vg = self.ywidth
+        self.ho = self.xcenter
+        self.vo = self.ycenter
