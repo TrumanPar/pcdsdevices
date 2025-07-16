@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>459</height>
+    <width>527</width>
+    <height>463</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -66,7 +66,7 @@ border-radius: 0px;
      <property name="lineWidth">
       <number>0</number>
      </property>
-     <widget class="PyDMScaleIndicator" name="PyDMScaleIndicator_14">
+     <widget class="PyDMScaleIndicator" name="BOTTOM_SCALE">
       <property name="geometry">
        <rect>
         <x>334</x>
@@ -91,7 +91,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>ca://${prefix}:MMS:BOTTOM.RBV</string>
+       <string/>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -144,7 +144,7 @@ border-radius: 0px;
        <double>0.000000000000000</double>
       </property>
      </widget>
-     <widget class="PyDMScaleIndicator" name="PyDMScaleIndicator_15">
+     <widget class="PyDMScaleIndicator" name="TOP_SCALE">
       <property name="geometry">
        <rect>
         <x>264</x>
@@ -175,7 +175,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>ca://${prefix}:MMS:TOP.RBV</string>
+       <string/>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -231,7 +231,7 @@ border-radius: 0px;
        <double>0.000000000000000</double>
       </property>
      </widget>
-     <widget class="PyDMScaleIndicator" name="PyDMScaleIndicator_16">
+     <widget class="PyDMScaleIndicator" name="NORTH_SCALE">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -265,7 +265,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>ca://${prefix}:MMS:NORTH.RBV</string>
+       <string/>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -318,7 +318,7 @@ border-radius: 0px;
        <double>0.000000000000000</double>
       </property>
      </widget>
-     <widget class="PyDMScaleIndicator" name="PyDMScaleIndicator_17">
+     <widget class="PyDMScaleIndicator" name="SOUTH_SCALE">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -340,7 +340,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>ca://${prefix}:MMS:SOUTH.RBV</string>
+       <string/>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -459,7 +459,7 @@ border-radius: 0px;
       <number>0</number>
      </property>
      <item row="0" column="2">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_23">
+      <widget class="PyDMLineEdit" name="XCenter_REQ">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -487,7 +487,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_24">
+      <widget class="PyDMLineEdit" name="XWidth_REQ">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -540,7 +540,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="PyDMLabel" name="PyDMLabel_47">
+      <widget class="PyDMLabel" name="XCenter_RBV">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -605,7 +605,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_7">
+      <widget class="PyDMLineEdit" name="YCenter_REQ">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -633,7 +633,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="5">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_8">
+      <widget class="PyDMLineEdit" name="YWidth_REQ">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -661,7 +661,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="4">
-      <widget class="PyDMLabel" name="PyDMLabel_46">
+      <widget class="PyDMLabel" name="YWidth_RBV">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -701,7 +701,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="PyDMLabel" name="PyDMLabel_48">
+      <widget class="PyDMLabel" name="XWidth_RBV">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -741,7 +741,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="4">
-      <widget class="PyDMLabel" name="PyDMLabel_45">
+      <widget class="PyDMLabel" name="YCenter_RBV">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -858,7 +858,7 @@ border-radius: 0px;
       <number>0</number>
      </property>
      <item row="0" column="6">
-      <widget class="PyDMPushButton" name="PyDMPushButton">
+      <widget class="PyDMPushButton" name="TOP_STOP">
        <property name="toolTip">
         <string/>
        </property>
@@ -869,7 +869,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:TOP.STOP</string>
+        <string/>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -877,7 +877,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="2" column="7">
-      <widget class="PyDMShellCommand" name="PyDMShellCommand_3">
+      <widget class="PyDMShellCommand" name="NORTH_EXPERT">
        <property name="toolTip">
         <string/>
        </property>
@@ -892,12 +892,12 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator">
+      <widget class="PyDMByteIndicator" name="TOP_LLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:TOP.LLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -915,7 +915,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="3" column="6">
-      <widget class="PyDMPushButton" name="PyDMPushButton_4">
+      <widget class="PyDMPushButton" name="SOUTH_STOP">
        <property name="toolTip">
         <string/>
        </property>
@@ -926,7 +926,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:SOUTH.STOP</string>
+        <string/>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -934,7 +934,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="PyDMLabel" name="PyDMLabel">
+      <widget class="PyDMLabel" name="TOP_RBV">
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -948,17 +948,17 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:TOP.RBV</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="2" column="3">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_7">
+      <widget class="PyDMByteIndicator" name="NORTH_HLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:NORTH.HLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -976,7 +976,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="4">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_2">
+      <widget class="PyDMLineEdit" name="BOTTOM_VAL">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -993,17 +993,17 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:BOTTOM.VAL</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_2">
+      <widget class="PyDMByteIndicator" name="TOP_HLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:TOP.HLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1031,12 +1031,12 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_5">
+      <widget class="PyDMByteIndicator" name="SOUTH_LS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:SOUTH.LLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1054,7 +1054,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="7">
-      <widget class="PyDMShellCommand" name="PyDMShellCommand_2">
+      <widget class="PyDMShellCommand" name="BOTTOM_EXPERT">
        <property name="toolTip">
         <string/>
        </property>
@@ -1069,7 +1069,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="PyDMLabel" name="PyDMLabel_2">
+      <widget class="PyDMLabel" name="BOTTOM_RBV">
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -1083,17 +1083,17 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:BOTTOM.RBV</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_6">
+      <widget class="PyDMByteIndicator" name="BOTTOM_HLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:BOTTOM.HLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1111,7 +1111,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="PyDMShellCommand" name="PyDMShellCommand">
+      <widget class="PyDMShellCommand" name="TOP_EXPERT">
        <property name="toolTip">
         <string/>
        </property>
@@ -1129,7 +1129,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="3" column="7">
-      <widget class="PyDMShellCommand" name="PyDMShellCommand_4">
+      <widget class="PyDMShellCommand" name="SOUTH_EXPERT">
        <property name="toolTip">
         <string/>
        </property>
@@ -1144,7 +1144,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="3" column="2">
-      <widget class="PyDMLabel" name="PyDMLabel_4">
+      <widget class="PyDMLabel" name="SOUTH_RBV">
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -1158,7 +1158,7 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:SOUTH.RBV</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -1173,7 +1173,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="PyDMLabel" name="PyDMLabel_3">
+      <widget class="PyDMLabel" name="NORTH_RBV">
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -1187,17 +1187,17 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:NORTH.RBV</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_4">
+      <widget class="PyDMByteIndicator" name="NORTH_LLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:NORTH.LLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1215,12 +1215,12 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_3">
+      <widget class="PyDMByteIndicator" name="BOTTOM_LLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:BOTTOM.LLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1238,7 +1238,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="2" column="6">
-      <widget class="PyDMPushButton" name="PyDMPushButton_3">
+      <widget class="PyDMPushButton" name="NORTH_STOP">
        <property name="toolTip">
         <string/>
        </property>
@@ -1249,7 +1249,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:NORTH.STOP</string>
+        <string/>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1267,7 +1267,10 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="4">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit">
+      <widget class="PyDMLineEdit" name="TOP_VAL">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -1284,12 +1287,12 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:TOP.VAL</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="3" column="4">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_4">
+      <widget class="PyDMLineEdit" name="SOUTH_VAL">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -1306,12 +1309,12 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:SOUTH.VAL</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="2" column="4">
-      <widget class="PyDMLineEdit" name="PyDMLineEdit_3">
+      <widget class="PyDMLineEdit" name="NORTH_VAL">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -1328,17 +1331,17 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:NORTH.VAL</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item row="3" column="3">
-      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_8">
+      <widget class="PyDMByteIndicator" name="SOUTH_HLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:SOUTH.HLS</string>
+        <string/>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1366,7 +1369,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="6">
-      <widget class="PyDMPushButton" name="PyDMPushButton_2">
+      <widget class="PyDMPushButton" name="BOTTOM_STOP">
        <property name="toolTip">
         <string/>
        </property>
@@ -1377,7 +1380,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:MMS:BOTTOM.STOP</string>
+        <string/>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1385,7 +1388,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="PyDMPushButton" name="PyDMPushButton_5">
+      <widget class="PyDMPushButton" name="TOP_HOME">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -1401,7 +1404,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="1" column="5">
-      <widget class="PyDMPushButton" name="PyDMPushButton_6">
+      <widget class="PyDMPushButton" name="BOTTOM_HOME">
        <property name="toolTip">
         <string/>
        </property>
@@ -1411,7 +1414,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="2" column="5">
-      <widget class="PyDMPushButton" name="PyDMPushButton_7">
+      <widget class="PyDMPushButton" name="NORTH_HOME">
        <property name="toolTip">
         <string/>
        </property>
@@ -1421,7 +1424,7 @@ border-radius: 0px;
       </widget>
      </item>
      <item row="3" column="5">
-      <widget class="PyDMPushButton" name="PyDMPushButton_8">
+      <widget class="PyDMPushButton" name="SOUTH_HOME">
        <property name="toolTip">
         <string/>
        </property>
