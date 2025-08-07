@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>527</width>
-    <height>463</height>
+    <height>497</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,6 +29,77 @@
       <number>-4</number>
      </property>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,2,0,0,0">
+     <item>
+      <widget class="PyDMLabel" name="PyDMLabel">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>Setup:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PyDMByteIndicator" name="READY_INDICATOR">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="labels" stdset="0">
+        <stringlist>
+         <string>Ready</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="PyDMPushButton" name="CALIBRATE_BTN">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>Calibrate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QFrame" name="frame">
@@ -482,7 +553,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:XCEN_REQ</string>
+        <string>sig://${name}.xcenter.setpoint</string>
        </property>
       </widget>
      </item>
@@ -510,7 +581,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:XWID_REQ</string>
+        <string>sig://${name}.xwidth.setpoint</string>
        </property>
       </widget>
      </item>
@@ -565,6 +636,9 @@ border-radius: 0px;
        <property name="whatsThis">
         <string/>
        </property>
+       <property name="text">
+        <string/>
+       </property>
        <property name="precision" stdset="0">
         <number>3</number>
        </property>
@@ -572,7 +646,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:ACTUAL_XCENTER_RBV</string>
+        <string>sig://${name}.xcenter.readback</string>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -628,7 +702,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:YCEN_REQ</string>
+        <string>sig://${name}.ycenter.setpoint</string>
        </property>
       </widget>
      </item>
@@ -656,7 +730,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:YWID_REQ</string>
+        <string>sig://${name}.ywidth.setpoint</string>
        </property>
       </widget>
      </item>
@@ -686,6 +760,9 @@ border-radius: 0px;
        <property name="whatsThis">
         <string/>
        </property>
+       <property name="text">
+        <string/>
+       </property>
        <property name="precision" stdset="0">
         <number>3</number>
        </property>
@@ -693,7 +770,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:ACTUAL_YWIDTH_RBV</string>
+        <string>sig://${name}.ywidth.readback</string>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -726,6 +803,9 @@ border-radius: 0px;
        <property name="whatsThis">
         <string/>
        </property>
+       <property name="text">
+        <string/>
+       </property>
        <property name="precision" stdset="0">
         <number>3</number>
        </property>
@@ -733,7 +813,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:ACTUAL_XWIDTH_RBV</string>
+        <string>sig://${name}.xwidth.readback</string>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -766,6 +846,9 @@ border-radius: 0px;
        <property name="whatsThis">
         <string/>
        </property>
+       <property name="text">
+        <string/>
+       </property>
        <property name="precision" stdset="0">
         <number>3</number>
        </property>
@@ -773,7 +856,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>ca://${prefix}:ACTUAL_YCENTER_RBV</string>
+        <string>sig://${name}.ycenter.readback</string>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -869,7 +952,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.top_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -897,7 +980,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.top_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -926,7 +1009,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.south_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -948,7 +1031,7 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.top_rbv</string>
        </property>
       </widget>
      </item>
@@ -958,7 +1041,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.north_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -993,7 +1076,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.bottom_val</string>
        </property>
       </widget>
      </item>
@@ -1003,7 +1086,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.top_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1036,7 +1119,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.south_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1083,7 +1166,7 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.bottom_rbv</string>
        </property>
       </widget>
      </item>
@@ -1093,7 +1176,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.bottom_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1158,7 +1241,7 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.south_rbv</string>
        </property>
       </widget>
      </item>
@@ -1187,7 +1270,7 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.north_rbv</string>
        </property>
       </widget>
      </item>
@@ -1197,7 +1280,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.north_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1220,7 +1303,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.bottom_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1249,7 +1332,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.north_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1287,7 +1370,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.top_val</string>
        </property>
       </widget>
      </item>
@@ -1309,7 +1392,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.south_val</string>
        </property>
       </widget>
      </item>
@@ -1331,7 +1414,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.north_val</string>
        </property>
       </widget>
      </item>
@@ -1341,7 +1424,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.south_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1380,7 +1463,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.bottom_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1398,8 +1481,11 @@ border-radius: 0px;
        <property name="text">
         <string>Home</string>
        </property>
+       <property name="monitorDisp" stdset="0">
+        <bool>false</bool>
+       </property>
        <property name="channel" stdset="0">
-        <string/>
+        <string>sig://${name}.top.do_calib</string>
        </property>
       </widget>
      </item>
@@ -1411,6 +1497,9 @@ border-radius: 0px;
        <property name="text">
         <string>Home</string>
        </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.bottom.do_calib</string>
+       </property>
       </widget>
      </item>
      <item row="2" column="5">
@@ -1421,6 +1510,9 @@ border-radius: 0px;
        <property name="text">
         <string>Home</string>
        </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.north.do_calib</string>
+       </property>
       </widget>
      </item>
      <item row="3" column="5">
@@ -1430,6 +1522,9 @@ border-radius: 0px;
        </property>
        <property name="text">
         <string>Home</string>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.south.do_calib</string>
        </property>
       </widget>
      </item>

@@ -838,25 +838,24 @@ class SmaractSlitPositioner(FltMvInterface, PVPositioner):
         )
 
         # Move all motors that need to move for this axis
-        statuses = []
-
         if self.slit_type in ("XWIDTH", "XCENTER"):
             # X movement affects north/south motors
-            if self._motor_north:
-                statuses.append(self._motor_north.move(north_pos, wait=False))
-            if self._motor_south:
-                statuses.append(self._motor_south.move(south_pos, wait=False))
+            status_a = self._motor_north.move(north_pos, wait=False)
+            status_b = self._motor_south.move(south_pos, wait=False)
+
+            combined_status = status_a & status_b
+
+            # Add callback to update readback when move is complete
+            combined_status.add_callback(self._update_readback)
+
+            return combined_status
 
         if self.slit_type in ("YWIDTH", "YCENTER"):
             # Y movement affects top/bottom motors
-            if self._motor_top:
-                statuses.append(self._motor_top.move(top_pos, wait=False))
-            if self._motor_bottom:
-                statuses.append(self._motor_bottom.move(bottom_pos, wait=False))
+            status_a = self._motor_top.move(top_pos, wait=False)
+            status_b = self._motor_bottom.move(bottom_pos, wait=False)
 
-        # Combine all move statuses
-        if statuses:
-            combined_status = AndStatus(*statuses)
+            combined_status = status_a & status_b
 
             # Add callback to update readback when move is complete
             combined_status.add_callback(self._update_readback)
@@ -917,16 +916,43 @@ class SmaractSlits(SlitsBase):
     """
 
     # Slit positioners - use our custom Smaract positioner
-    xwidth = Cpt(SmaractSlitPositioner, '', slit_type='XWIDTH', kind='hinted')
-    ywidth = Cpt(SmaractSlitPositioner, '', slit_type='YWIDTH', kind='hinted')
+    xwidth = Cpt(SmaractSlitPositioner, '', slit_type='XWIDTH', kind='normal')
+    ywidth = Cpt(SmaractSlitPositioner, '', slit_type='YWIDTH', kind='normal')
     xcenter = Cpt(SmaractSlitPositioner, '', slit_type='XCENTER', kind='normal')
     ycenter = Cpt(SmaractSlitPositioner, '', slit_type='YCENTER', kind='normal')
 
-    # Raw motors - individual Smaract motor IOCs
+    # Raw motors - individual Smaract motor IOCs and their PVs
     top = Cpt(SmarAct, ':TOP', kind='normal')
+    top_lls = Cpt(EpicsSignalRO, ':TOP:LLS', kind='normal')
+    top_hls = Cpt(EpicsSignalRO, ':TOP:HLS', kind='normal')
+    top_rbv = Cpt(EpicsSignalRO, ':TOP.RBV', kind='normal')
+    top_val = Cpt(EpicsSignal, ':TOP.VAL', kind='normal')
+    #top_home = Cpt(EpicsSignal, ':TOP:DO_CALIB.PROC', kind='normal')
+    top_stop = Cpt(EpicsSignal, ':TOP.STOP', kind='normal')
+
     bottom = Cpt(SmarAct, ':BOTTOM', kind='normal')
+    bottom_lls = Cpt(EpicsSignalRO, ':BOTTOM:LLS', kind='normal')
+    bottom_hls = Cpt(EpicsSignalRO, ':BOTTOM:HLS', kind='normal')
+    bottom_rbv = Cpt(EpicsSignalRO, ':BOTTOM.RBV', kind='normal')
+    bottom_val = Cpt(EpicsSignal, ':BOTTOM.VAL', kind='normal')
+    #bottom_home = Cpt(EpicsSignal, ':BOTTOM:DO_CALIB.PROC', kind='normal')
+    bottom_stop = Cpt(EpicsSignal, ':BOTTOM.STOP', kind='normal')
+
     north = Cpt(SmarAct, ':NORTH', kind='normal')
+    north_lls = Cpt(EpicsSignalRO, ':NORTH:LLS', kind='normal')
+    north_hls = Cpt(EpicsSignalRO, ':NORTH:HLS', kind='normal')
+    north_rbv = Cpt(EpicsSignalRO, ':NORTH.RBV', kind='normal')
+    north_val = Cpt(EpicsSignal, ':NORTH.VAL', kind='normal')
+    #north_home = Cpt(EpicsSignal, ':NORTH:DO_CALIB.PROC', kind='normal')
+    north_stop = Cpt(EpicsSignal, ':NORTH.STOP', kind='normal')
+
     south = Cpt(SmarAct, ':SOUTH', kind='normal')
+    south_lls = Cpt(EpicsSignalRO, ':SOUTH:LLS', kind='normal')
+    south_hls = Cpt(EpicsSignalRO, ':SOUTH:HLS', kind='normal')
+    south_rbv = Cpt(EpicsSignalRO, ':SOUTH.RBV', kind='normal')
+    south_val = Cpt(EpicsSignal, ':SOUTH.VAL', kind='normal')
+    #south_home = Cpt(EpicsSignal, ':SOUTH:DO_CALIB.PROC', kind='normal')
+    south_stop = Cpt(EpicsSignal, ':SOUTH.STOP', kind='normal')
 
     # Offset parameters (equivalent to PLC encoder offsets)
     # These can be set to calibrate the slit zero positions
@@ -953,3 +979,5 @@ class SmaractSlits(SlitsBase):
         self.vg = self.ywidth
         self.ho = self.xcenter
         self.vo = self.ycenter
+
+        self.needs_calibration = self.top.needs_calib or self.bottom.needs_calib or self.south.needs_calib or self.north.needs_calib
