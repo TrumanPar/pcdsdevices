@@ -23,7 +23,7 @@ from ophyd import FormattedComponent as FCpt
 from ophyd.ophydobj import OphydObject
 from ophyd.pv_positioner import PVPositioner
 from ophyd.signal import Signal, SignalRO
-from ophyd.status import Status, AndStatus
+from ophyd.status import Status
 from ophyd.status import wait as status_wait
 
 from .analog_signals import FDQ
@@ -37,7 +37,7 @@ from .interface import (BaseInterface, FltMvInterface, LightpathInOutCptMixin,
                         LightpathMixin, MvInterface)
 from .pmps import TwinCATStatePMPS
 from .sensors import RTD, TwinCATTempSensor
-from .signal import PytmcSignal
+from .signal import PytmcSignal, MultiDerivedSignal
 from .sim import FastMotor
 from .utils import get_status_float, get_status_value, schedule_task
 from .variety import set_metadata
@@ -922,37 +922,37 @@ class SmaractSlits(SlitsBase):
     ycenter = Cpt(SmaractSlitPositioner, '', slit_type='YCENTER', kind='normal')
 
     # Raw motors - individual Smaract motor IOCs and their PVs
-    top = Cpt(SmarAct, ':TOP', kind='normal')
-    top_lls = Cpt(EpicsSignalRO, ':TOP:LLS', kind='normal')
-    top_hls = Cpt(EpicsSignalRO, ':TOP:HLS', kind='normal')
-    top_rbv = Cpt(EpicsSignalRO, ':TOP.RBV', kind='normal')
-    top_val = Cpt(EpicsSignal, ':TOP.VAL', kind='normal')
-    #top_home = Cpt(EpicsSignal, ':TOP:DO_CALIB.PROC', kind='normal')
-    top_stop = Cpt(EpicsSignal, ':TOP.STOP', kind='normal')
+    top = FCpt(SmarAct, '{prefix}{self._top_pv}', kind='normal')
+    top_lls = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}:LLS', kind='normal')
+    top_hls = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}:HLS', kind='normal')
+    top_rbv = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}.RBV', kind='normal')
+    top_val = FCpt(EpicsSignal, '{prefix}{self._top_pv}.VAL', kind='normal')
+    top_stop = FCpt(EpicsSignal, '{prefix}{self._top_pv}.STOP', kind='normal')
+    top_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}.NEED_CALIB')
 
-    bottom = Cpt(SmarAct, ':BOTTOM', kind='normal')
-    bottom_lls = Cpt(EpicsSignalRO, ':BOTTOM:LLS', kind='normal')
-    bottom_hls = Cpt(EpicsSignalRO, ':BOTTOM:HLS', kind='normal')
-    bottom_rbv = Cpt(EpicsSignalRO, ':BOTTOM.RBV', kind='normal')
-    bottom_val = Cpt(EpicsSignal, ':BOTTOM.VAL', kind='normal')
-    #bottom_home = Cpt(EpicsSignal, ':BOTTOM:DO_CALIB.PROC', kind='normal')
-    bottom_stop = Cpt(EpicsSignal, ':BOTTOM.STOP', kind='normal')
+    bottom = FCpt(SmarAct, '{prefix}{self._bottom_pv}', kind='normal')
+    bottom_lls = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}:LLS', kind='normal')
+    bottom_hls = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}:HLS', kind='normal')
+    bottom_rbv = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}.RBV', kind='normal')
+    bottom_val = FCpt(EpicsSignal, '{prefix}{self._bottom_pv}.VAL', kind='normal')
+    bottom_stop = FCpt(EpicsSignal, '{prefix}{self._bottom_pv}.STOP', kind='normal')
+    bottom_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}.NEED_CALIB')
 
-    north = Cpt(SmarAct, ':NORTH', kind='normal')
-    north_lls = Cpt(EpicsSignalRO, ':NORTH:LLS', kind='normal')
-    north_hls = Cpt(EpicsSignalRO, ':NORTH:HLS', kind='normal')
-    north_rbv = Cpt(EpicsSignalRO, ':NORTH.RBV', kind='normal')
-    north_val = Cpt(EpicsSignal, ':NORTH.VAL', kind='normal')
-    #north_home = Cpt(EpicsSignal, ':NORTH:DO_CALIB.PROC', kind='normal')
-    north_stop = Cpt(EpicsSignal, ':NORTH.STOP', kind='normal')
+    north = FCpt(SmarAct, '{prefix}{self._north_pv}', kind='normal')
+    north_lls = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}:LLS', kind='normal')
+    north_hls = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}:HLS', kind='normal')
+    north_rbv = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}.RBV', kind='normal')
+    north_val = FCpt(EpicsSignal, '{prefix}{self._north_pv}.VAL', kind='normal')
+    north_stop = FCpt(EpicsSignal, '{prefix}{self._north_pv}.STOP', kind='normal')
+    north_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}.NEED_CALIB')
 
-    south = Cpt(SmarAct, ':SOUTH', kind='normal')
-    south_lls = Cpt(EpicsSignalRO, ':SOUTH:LLS', kind='normal')
-    south_hls = Cpt(EpicsSignalRO, ':SOUTH:HLS', kind='normal')
-    south_rbv = Cpt(EpicsSignalRO, ':SOUTH.RBV', kind='normal')
-    south_val = Cpt(EpicsSignal, ':SOUTH.VAL', kind='normal')
-    #south_home = Cpt(EpicsSignal, ':SOUTH:DO_CALIB.PROC', kind='normal')
-    south_stop = Cpt(EpicsSignal, ':SOUTH.STOP', kind='normal')
+    south = FCpt(SmarAct, '{prefix}{self._south_pv}', kind='normal')
+    south_lls = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}:LLS', kind='normal')
+    south_hls = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}:HLS', kind='normal')
+    south_rbv = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}.RBV', kind='normal')
+    south_val = FCpt(EpicsSignal, '{prefix}{self._south_pv}.VAL', kind='normal')
+    south_stop = FCpt(EpicsSignal, '{prefix}{self._south_pv}.STOP', kind='normal')
+    south_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}.NEED_CALIB')
 
     # Offset parameters (equivalent to PLC encoder offsets)
     # These can be set to calibrate the slit zero positions
@@ -961,11 +961,23 @@ class SmaractSlits(SlitsBase):
     top_offset = Cpt(Signal, value=0.0, kind='config')
     bottom_offset = Cpt(Signal, value=0.0, kind='config')
 
+    # Component to check if we need to calibrate stages. This will disable any moves on the GUI
+    calibrated = Cpt(
+        MultiDerivedSignal,
+        attrs=['south_not_ready', 'north_not_ready', 'bottom_not_ready', 'top_not_ready'],
+        doc="Check if the slits need to be calibrated. If so, the GUI will disable moves until this is compelted.",
+    )
+
     # Lightpath configuration (uses position property now instead of readback)
     lightpath_cpts = ['xwidth.position', 'ywidth.position']
 
-    def __init__(self, prefix, *, name, **kwargs):
+    def __init__(self, prefix, *, name, north_pv, south_pv, top_pv, bottom_pv, **kwargs):
         super().__init__(prefix, name=name, nominal_aperture=3, **kwargs)
+
+        self._north_pv = north_pv
+        self._south_pv = south_pv
+        self._top_pv = top_pv
+        self._bottom_pv = bottom_pv
 
         # Link motors to all positioners so they can calculate positions
         for positioner in [self.xwidth, self.ywidth, self.xcenter, self.ycenter]:
@@ -980,4 +992,13 @@ class SmaractSlits(SlitsBase):
         self.ho = self.xcenter
         self.vo = self.ycenter
 
-        self.needs_calibration = self.top.needs_calib or self.bottom.needs_calib or self.south.needs_calib or self.north.needs_calib
+    @calibrated.sub_value
+    def _check_calib(self) -> bool:
+        """
+        Callback to check the status of the four smaracts
+
+        Returns: bool
+        0 --> Calibration is required
+        1 --> Stages are calibrated
+        """
+        return not self.top_not_ready or not self.bottom_not_ready or not self.south_not_ready or not self.north_not_ready

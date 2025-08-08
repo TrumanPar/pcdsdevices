@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>527</width>
-    <height>497</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,17 +31,17 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,2,0,0,0">
-     <item>
-      <widget class="PyDMLabel" name="PyDMLabel">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>Setup:</string>
-       </property>
-      </widget>
-     </item>
+    <widget class="QLabel" name="label_14">
+     <property name="text">
+      <string>If the ready bit is not green, one or more stages are not homed and calibrated. Open the expert screens to home and calibrate</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,0">
      <item>
       <widget class="PyDMByteIndicator" name="READY_INDICATOR">
        <property name="maximumSize">
@@ -53,36 +53,17 @@
        <property name="toolTip">
         <string/>
        </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
        <property name="labels" stdset="0">
         <stringlist>
          <string>Ready</string>
         </stringlist>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="PyDMPushButton" name="CALIBRATE_BTN">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>Calibrate</string>
        </property>
       </widget>
      </item>
@@ -162,7 +143,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string/>
+       <string>sig://${name}.bottom_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -246,7 +227,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string/>
+       <string>sig://${name}.top_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -336,7 +317,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string/>
+       <string>sig://${name}.north_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -411,7 +392,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string/>
+       <string>sig://${name}.south_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -940,63 +921,6 @@ border-radius: 0px;
      <property name="topMargin">
       <number>0</number>
      </property>
-     <item row="0" column="6">
-      <widget class="PyDMPushButton" name="TOP_STOP">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: red;</string>
-       </property>
-       <property name="text">
-        <string>Stop</string>
-       </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.top_stop</string>
-       </property>
-       <property name="pressValue" stdset="0">
-        <string>1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="7">
-      <widget class="PyDMShellCommand" name="NORTH_EXPERT">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>Expert</string>
-       </property>
-       <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:NORTH','name':'${name}_north'}]&quot;</string>
-        </stringlist>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="PyDMByteIndicator" name="TOP_LLS">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.top_lls</string>
-       </property>
-       <property name="onColor" stdset="0">
-        <color>
-         <red>255</red>
-         <green>255</green>
-         <blue>0</blue>
-        </color>
-       </property>
-       <property name="showLabels" stdset="0">
-        <bool>false</bool>
-       </property>
-       <property name="circles" stdset="0">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="6">
       <widget class="PyDMPushButton" name="SOUTH_STOP">
        <property name="toolTip">
@@ -1016,8 +940,17 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="PyDMLabel" name="TOP_RBV">
+     <item row="0" column="4">
+      <widget class="PyDMLineEdit" name="TOP_VAL">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -1027,21 +960,18 @@ border-radius: 0px;
        <property name="toolTip">
         <string/>
        </property>
-       <property name="showUnits" stdset="0">
-        <bool>true</bool>
-       </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_rbv</string>
+        <string>sig://${name}.top_val</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
-      <widget class="PyDMByteIndicator" name="NORTH_HLS">
+     <item row="1" column="3">
+      <widget class="PyDMByteIndicator" name="BOTTOM_HLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_hls</string>
+        <string>sig://${name}.bottom_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1055,6 +985,25 @@ border-radius: 0px;
        </property>
        <property name="circles" stdset="0">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <widget class="PyDMPushButton" name="BOTTOM_STOP">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: red;</string>
+       </property>
+       <property name="text">
+        <string>Stop</string>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.bottom_stop</string>
+       </property>
+       <property name="pressValue" stdset="0">
+        <string>1</string>
        </property>
       </widget>
      </item>
@@ -1103,13 +1052,55 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>NORTH</string>
+     <item row="0" column="7">
+      <widget class="PyDMShellCommand" name="TOP_EXPERT">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="indent">
-        <number>5</number>
+       <property name="text">
+        <string>Expert</string>
+       </property>
+       <property name="showIcon" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="commands" stdset="0">
+        <stringlist>
+         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:TOP','name':'${name}_top'}]&quot;</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="7">
+      <widget class="PyDMShellCommand" name="BOTTOM_EXPERT">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>Expert</string>
+       </property>
+       <property name="commands" stdset="0">
+        <stringlist>
+         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:BOTTOM','name':'${name}_bottom'}]&quot;</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="PyDMPushButton" name="TOP_HOME">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>Home</string>
+       </property>
+       <property name="monitorDisp" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.top.do_calib</string>
        </property>
       </widget>
      </item>
@@ -1136,47 +1127,23 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="1" column="7">
-      <widget class="PyDMShellCommand" name="BOTTOM_EXPERT">
-       <property name="toolTip">
-        <string/>
-       </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Expert</string>
+        <string>TOP</string>
        </property>
-       <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:BOTTOM','name':'${name}_bottom'}]&quot;</string>
-        </stringlist>
+       <property name="indent">
+        <number>5</number>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="PyDMLabel" name="BOTTOM_RBV">
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="showUnits" stdset="0">
-        <bool>true</bool>
-       </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_rbv</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="PyDMByteIndicator" name="BOTTOM_HLS">
+     <item row="1" column="1">
+      <widget class="PyDMByteIndicator" name="BOTTOM_LLS">
        <property name="toolTip">
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_hls</string>
+        <string>sig://${name}.bottom_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1193,36 +1160,25 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="0" column="7">
-      <widget class="PyDMShellCommand" name="TOP_EXPERT">
+     <item row="3" column="4">
+      <widget class="PyDMLineEdit" name="SOUTH_VAL">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
-       <property name="text">
-        <string>Expert</string>
-       </property>
-       <property name="showIcon" stdset="0">
-        <bool>true</bool>
-       </property>
-       <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:TOP','name':'${name}_top'}]&quot;</string>
-        </stringlist>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="7">
-      <widget class="PyDMShellCommand" name="SOUTH_EXPERT">
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>Expert</string>
-       </property>
-       <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:SOUTH','name':'${name}_south'}]&quot;</string>
-        </stringlist>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.south_val</string>
        </property>
       </widget>
      </item>
@@ -1245,13 +1201,83 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_2">
+     <item row="2" column="3">
+      <widget class="PyDMByteIndicator" name="NORTH_HLS">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.north_hls</string>
+       </property>
+       <property name="onColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="showLabels" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="circles" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="7">
+      <widget class="PyDMShellCommand" name="SOUTH_EXPERT">
+       <property name="toolTip">
+        <string/>
+       </property>
        <property name="text">
-        <string>SOUTH</string>
+        <string>Expert</string>
+       </property>
+       <property name="commands" stdset="0">
+        <stringlist>
+         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:SOUTH','name':'${name}_south'}]&quot;</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="6">
+      <widget class="PyDMPushButton" name="NORTH_STOP">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: red;</string>
+       </property>
+       <property name="text">
+        <string>Stop</string>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.north_stop</string>
+       </property>
+       <property name="pressValue" stdset="0">
+        <string>1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>BOTTOM</string>
        </property>
        <property name="indent">
         <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="PyDMPushButton" name="BOTTOM_HOME">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>Home</string>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.bottom.do_calib</string>
        </property>
       </widget>
      </item>
@@ -1297,31 +1323,27 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="PyDMByteIndicator" name="BOTTOM_LLS">
+     <item row="0" column="2">
+      <widget class="PyDMLabel" name="TOP_RBV">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_lls</string>
-       </property>
-       <property name="onColor" stdset="0">
-        <color>
-         <red>255</red>
-         <green>255</green>
-         <blue>0</blue>
-        </color>
-       </property>
-       <property name="showLabels" stdset="0">
-        <bool>false</bool>
-       </property>
-       <property name="circles" stdset="0">
+       <property name="showUnits" stdset="0">
         <bool>true</bool>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.top_rbv</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="6">
-      <widget class="PyDMPushButton" name="NORTH_STOP">
+     <item row="0" column="6">
+      <widget class="PyDMPushButton" name="TOP_STOP">
        <property name="toolTip">
         <string/>
        </property>
@@ -1332,89 +1354,10 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_stop</string>
+        <string>sig://${name}.top_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>BOTTOM</string>
-       </property>
-       <property name="indent">
-        <number>5</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="PyDMLineEdit" name="TOP_VAL">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.top_val</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="4">
-      <widget class="PyDMLineEdit" name="SOUTH_VAL">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.south_val</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="4">
-      <widget class="PyDMLineEdit" name="NORTH_VAL">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.north_val</string>
        </property>
       </widget>
      </item>
@@ -1441,64 +1384,102 @@ border-radius: 0px;
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
+     <item row="2" column="7">
+      <widget class="PyDMShellCommand" name="NORTH_EXPERT">
+       <property name="toolTip">
+        <string/>
+       </property>
        <property name="text">
-        <string>TOP</string>
+        <string>Expert</string>
+       </property>
+       <property name="commands" stdset="0">
+        <stringlist>
+         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:NORTH','name':'${name}_north'}]&quot;</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>NORTH</string>
        </property>
        <property name="indent">
         <number>5</number>
        </property>
       </widget>
      </item>
-     <item row="1" column="6">
-      <widget class="PyDMPushButton" name="BOTTOM_STOP">
+     <item row="0" column="1">
+      <widget class="PyDMByteIndicator" name="TOP_LLS">
        <property name="toolTip">
         <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: red;</string>
-       </property>
-       <property name="text">
-        <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_stop</string>
+        <string>sig://${name}.top_lls</string>
        </property>
-       <property name="pressValue" stdset="0">
-        <string>1</string>
+       <property name="onColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>255</green>
+         <blue>0</blue>
+        </color>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="PyDMPushButton" name="TOP_HOME">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="text">
-        <string>Home</string>
-       </property>
-       <property name="monitorDisp" stdset="0">
+       <property name="showLabels" stdset="0">
         <bool>false</bool>
        </property>
-       <property name="channel" stdset="0">
-        <string>sig://${name}.top.do_calib</string>
+       <property name="circles" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="5">
-      <widget class="PyDMPushButton" name="BOTTOM_HOME">
+     <item row="1" column="2">
+      <widget class="PyDMLabel" name="BOTTOM_RBV">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
-       <property name="text">
-        <string>Home</string>
+       <property name="showUnits" stdset="0">
+        <bool>true</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom.do_calib</string>
+        <string>sig://${name}.bottom_rbv</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>SOUTH</string>
+       </property>
+       <property name="indent">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="PyDMLineEdit" name="NORTH_VAL">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.north_val</string>
        </property>
       </widget>
      </item>
@@ -1525,6 +1506,190 @@ border-radius: 0px;
        </property>
        <property name="channel" stdset="0">
         <string>sig://${name}.south.do_calib</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="8">
+      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_2">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.bottom_ready</string>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="showLabels" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="bigEndian" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="circles" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="numBits" stdset="0">
+        <number>1</number>
+       </property>
+       <property name="shift" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="labels" stdset="0">
+        <stringlist>
+         <string>Calib</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="8">
+      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_3">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.south_ready</string>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="showLabels" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="bigEndian" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="circles" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="numBits" stdset="0">
+        <number>1</number>
+       </property>
+       <property name="shift" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="labels" stdset="0">
+        <stringlist>
+         <string>Calib</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="8">
+      <widget class="PyDMByteIndicator" name="PyDMByteIndicator_4">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.north_ready</string>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="showLabels" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="bigEndian" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="circles" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="numBits" stdset="0">
+        <number>1</number>
+       </property>
+       <property name="shift" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="labels" stdset="0">
+        <stringlist>
+         <string>Calib</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8">
+      <widget class="PyDMByteIndicator" name="PyDMByteIndicator">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="alarmSensitiveContent" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip" stdset="0">
+        <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}.top_ready</string>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>255</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="showLabels" stdset="0">
+        <bool>true</bool>
+       </property>
+       <property name="bigEndian" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="circles" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="numBits" stdset="0">
+        <number>1</number>
+       </property>
+       <property name="shift" stdset="0">
+        <number>0</number>
+       </property>
+       <property name="labels" stdset="0">
+        <stringlist>
+         <string>Calib</string>
+        </stringlist>
        </property>
       </widget>
      </item>
