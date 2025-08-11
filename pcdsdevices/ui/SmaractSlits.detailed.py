@@ -29,8 +29,8 @@ class SmaractSlitsDetailedWidget(Display, utils.TyphosBase):
         """Typhos hook for adding a new device."""
         super().add_device(device)
 
-        # Link the callibrate cpt to the ready widget, and VAL widget's enabled bits
-        self.ui.READY_INDICATOR.enabled = self.device.calibrated
+        # Link the calibrate cpt to the ready widget, and VAL widget's enabled bits
+        self.ui.READY_INDICATOR.value = self.device.calibrated
 
         self.ui.TOP_VAL.enabled = self.device.calibrated
         self.ui.BOTTOM_VAL.enabled = self.device.calibrated
