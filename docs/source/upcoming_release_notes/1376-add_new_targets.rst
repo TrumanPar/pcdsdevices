@@ -1,4 +1,4 @@
-1349 Added AT3K2 class in attenuators.py for custom solid attenuator
+1376 add new targets
 #################
 
 API Breaks
@@ -11,11 +11,11 @@ Library Features
 
 Device Features
 ---------------
-- N/A
+- change 'TMOSpectrometerSOLIDATTStates'target count from 5 to 9
 
 New Devices
 -----------
-- AT3K2 Custom Solid Attenuator w/ 2 blades and 8 filters on each blade.
+- N/A
 
 Bugfixes
 --------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- jozamudi
+-tongju12

@@ -1,4 +1,4 @@
-1352 hide-pa1k4-targets
+1373 ipm-w8-prefix
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- For ``PA1K4`` (`CalibrationAxis`), change target count from 7 to 5 to hide targets 6 and 7
+- N/A
 
 New Devices
 -----------
@@ -19,7 +19,7 @@ New Devices
 
 Bugfixes
 --------
-- N/A
+- Added prefix for wave8 component of BeckhoffIntensityProfileTarget so PVs connect
 
 Maintenance
 -----------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- tongju12
+- KaushikMalapati

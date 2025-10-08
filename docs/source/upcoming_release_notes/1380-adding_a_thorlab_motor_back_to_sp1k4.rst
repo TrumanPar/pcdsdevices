@@ -1,4 +1,4 @@
-1359 add SL3K4 to dream_motion
+1380 adding a thorlab motor back to sp1k4
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- dream_motion: add SL3K4 motors to dream_motion
+- TMOSpectrometer: add back an old motor as a new name-fzp_piranha_rot
 
 New Devices
 -----------
@@ -23,8 +23,8 @@ Bugfixes
 
 Maintenance
 -----------
-- N/A
+- tongju12
 
 Contributors
 ------------
-- baljamal
+- N/A
