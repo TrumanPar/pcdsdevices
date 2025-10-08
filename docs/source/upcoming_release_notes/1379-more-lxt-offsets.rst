@@ -1,5 +1,5 @@
-1357 mnt_presets_sync_2
-#######################
+1379 more-lxt-offsets
+#################
 
 API Breaks
 ----------
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- N/A
+- Added instrument argument to Lcls2LaserTiming which is added to user_offset PV if defined
 
 New Devices
 -----------
@@ -23,8 +23,8 @@ Bugfixes
 
 Maintenance
 -----------
-- Sync presets when Presets.positions is accessed.
+- N/A
 
 Contributors
 ------------
-- tangkong
+- KaushikMalapati

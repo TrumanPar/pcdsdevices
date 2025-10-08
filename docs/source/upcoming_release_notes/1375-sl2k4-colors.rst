@@ -1,4 +1,4 @@
-1353 lxt_hla
+1375 sl2k4-colors
 #################
 
 API Breaks
@@ -11,8 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- New hla_enabled component for Lcls2LaserTiming
-- Added hla_check decorator, used by _setup_move, to raise an exception if hla is disabled
+- N/A
 
 New Devices
 -----------
@@ -20,7 +19,7 @@ New Devices
 
 Bugfixes
 --------
-- N/A
+- Swapped indicator and background colors for slits in SL2K4Slits.ui
 
 Maintenance
 -----------

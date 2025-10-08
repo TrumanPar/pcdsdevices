@@ -1,4 +1,4 @@
-1354 dccm
+1363 update-dream-motion-gui
 #################
 
 API Breaks
@@ -11,11 +11,11 @@ Library Features
 
 Device Features
 ---------------
-- N/A
+- Group all dream air motions into one class-one gui
 
 New Devices
 -----------
-- DCCM
+- N/A
 
 Bugfixes
 --------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- N/A
+- tongju12
