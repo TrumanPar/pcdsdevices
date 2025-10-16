@@ -1784,6 +1784,31 @@ class SmarActPicoscale(SmarAct):
         self.pico_wmin.long_name = 'Working distance (min)'
 
 
+class SmaractSlitAxis(SmarAct):
+
+    def check_value(self, value, *, limits=True, **kwargs):
+        # Convert to float and apply soft limits if available
+        v = float(value)
+        if limits:
+            # Try typical limit attributes; skip if not available
+            lo = getattr(self, 'low_limit', None)
+            hi = getattr(self, 'high_limit', None)
+            if lo is not None and v < lo:
+                raise ValueError(f'{self.name}: {v} < low limit {lo}')
+            if hi is not None and v > hi:
+                raise ValueError(f'{self.name}: {v} > high limit {hi}')
+        print(f"in check value, returning {v}")
+        return v
+
+    def set(self, position, *, timeout=None, wait=False):
+        print("in set")
+        st = self.move(position, wait=False, timeout=timeout)
+        # Ensure we return a proper Status object that completes with the move
+        if wait:
+            st.wait(timeout=timeout)
+        return st
+
+
 class PI_M824(PVPositionerIsClose):
     """
     class for hexapod PI axis

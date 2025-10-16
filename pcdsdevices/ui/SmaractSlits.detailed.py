@@ -1,13 +1,6 @@
-import pydm
-import re
-
 from pydm import Display
 from os import path
-
-from pydm.widgets import PyDMEmbeddedDisplay
-from qtpy import QtCore, QtWidgets
-from typhos import utils
-from epics import PV, camonitor, caget
+from typhos import utils, plugins
 
 class SmaractSlitsDetailedWidget(Display, utils.TyphosBase):
     """
@@ -44,13 +37,13 @@ class SmaractSlitsDetailedWidget(Display, utils.TyphosBase):
 
         # Set the expert screen buttons
         # Build the actual PV names using the device's prefix and PV attributes
-        top_pv = f"{self.device.prefix}{self.device._top_pv}"
-        bottom_pv = f"{self.device.prefix}{self.device._bottom_pv}"
-        north_pv = f"{self.device.prefix}{self.device._north_pv}"
-        south_pv = f"{self.device.prefix}{self.device._south_pv}"
+        top_pv = self.device.top.prefix
+        bottom_pv = self.device.bottom.prefix
+        north_pv = self.device.north.prefix
+        south_pv = self.device.south.prefix
 
         # Set up the shell commands for each motor button
-        self.ui.TOP_EXPERT.command = f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{top_pv}','name':'{self.device.name}_top'}}]\""
-        self.ui.BOTTOM_EXPERT.command = f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{bottom_pv}','name':'{self.device.name}_bottom'}}]\""
-        self.ui.NORTH_EXPERT.command = f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{north_pv}','name':'{self.device.name}_north'}}]\""
-        self.ui.SOUTH_EXPERT.command = f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{south_pv}','name':'{self.device.name}_south'}}]\""
+        self.ui.TOP_EXPERT.commands = [f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{top_pv}','name':'{self.device.name}_bottom'}}]\""]
+        self.ui.BOTTOM_EXPERT.commands = [f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{bottom_pv}','name':'{self.device.name}_bottom'}}]\""]
+        self.ui.NORTH_EXPERT.commands = [f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{north_pv}','name':'{self.device.name}_north'}}]\""]
+        self.ui.SOUTH_EXPERT.commands = [f"typhos \"pcdsdevices.smaract.SmarAct[{{'prefix':'{south_pv}','name':'{self.device.name}_south'}}]\""]

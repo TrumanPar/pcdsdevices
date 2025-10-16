@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
+    <width>584</width>
     <height>530</height>
    </rect>
   </property>
@@ -52,6 +52,9 @@
        </property>
        <property name="toolTip">
         <string/>
+       </property>
+       <property name="channel" stdset="0">
+        <string>sig://${name}_calibrated</string>
        </property>
        <property name="offColor" stdset="0">
         <color>
@@ -143,7 +146,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>sig://${name}.bottom_rbv</string>
+       <string>sig://${name}_bottom_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -227,7 +230,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>sig://${name}.top_rbv</string>
+       <string>sig://${name}_top_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -317,7 +320,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>sig://${name}.north_rbv</string>
+       <string>sig://${name}_north_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -392,7 +395,7 @@ border-radius: 0px;
        <bool>false</bool>
       </property>
       <property name="channel" stdset="0">
-       <string>sig://${name}.south_rbv</string>
+       <string>sig://${name}_south_rbv</string>
       </property>
       <property name="showValue" stdset="0">
        <bool>true</bool>
@@ -528,13 +531,13 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="precision" stdset="0">
-        <number>3</number>
+        <number>4</number>
        </property>
        <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.xcenter.setpoint</string>
+        <string>sig://${name}_cmd_xcenter</string>
        </property>
       </widget>
      </item>
@@ -556,13 +559,13 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="precision" stdset="0">
-        <number>3</number>
+        <number>4</number>
        </property>
        <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.xwidth.setpoint</string>
+        <string>sig://${name}_cmd_xwidth</string>
        </property>
       </widget>
      </item>
@@ -677,13 +680,13 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="precision" stdset="0">
-        <number>3</number>
+        <number>4</number>
        </property>
        <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.ycenter.setpoint</string>
+        <string>sig://${name}_cmd_ycenter</string>
        </property>
       </widget>
      </item>
@@ -705,13 +708,13 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="precision" stdset="0">
-        <number>3</number>
+        <number>4</number>
        </property>
        <property name="precisionFromPV" stdset="0">
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.ywidth.setpoint</string>
+        <string>sig://${name}_cmd_ywidth</string>
        </property>
       </widget>
      </item>
@@ -933,7 +936,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south_stop</string>
+        <string>sig://${name}_south_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -961,7 +964,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_val</string>
+        <string>sig://${name}_top_val</string>
        </property>
       </widget>
      </item>
@@ -971,7 +974,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_hls</string>
+        <string>sig://${name}_bottom_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1000,7 +1003,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_stop</string>
+        <string>sig://${name}_bottom_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1025,7 +1028,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_val</string>
+        <string>sig://${name}_bottom_val</string>
        </property>
       </widget>
      </item>
@@ -1035,7 +1038,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_hls</string>
+        <string>sig://${name}_top_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1064,9 +1067,7 @@ border-radius: 0px;
         <bool>true</bool>
        </property>
        <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:TOP','name':'${name}_top'}]&quot;</string>
-        </stringlist>
+        <stringlist/>
        </property>
       </widget>
      </item>
@@ -1079,9 +1080,7 @@ border-radius: 0px;
         <string>Expert</string>
        </property>
        <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:BOTTOM','name':'${name}_bottom'}]&quot;</string>
-        </stringlist>
+        <stringlist/>
        </property>
       </widget>
      </item>
@@ -1100,7 +1099,13 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top.do_calib</string>
+        <string>sig://${name}_top_do_calib</string>
+       </property>
+       <property name="pressValue" stdset="0">
+        <string>1</string>
+       </property>
+       <property name="writeWhenRelease" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1110,7 +1115,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south_lls</string>
+        <string>sig://${name}_south_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1143,7 +1148,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_lls</string>
+        <string>sig://${name}_bottom_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1178,7 +1183,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south_val</string>
+        <string>sig://${name}_south_val</string>
        </property>
       </widget>
      </item>
@@ -1193,11 +1198,17 @@ border-radius: 0px;
        <property name="toolTip">
         <string/>
        </property>
+       <property name="precision" stdset="0">
+        <number>5</number>
+       </property>
        <property name="showUnits" stdset="0">
         <bool>true</bool>
        </property>
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south_rbv</string>
+        <string>sig://${name}_south_rbv</string>
        </property>
       </widget>
      </item>
@@ -1207,7 +1218,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_hls</string>
+        <string>sig://${name}_north_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1233,9 +1244,7 @@ border-radius: 0px;
         <string>Expert</string>
        </property>
        <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:SOUTH','name':'${name}_south'}]&quot;</string>
-        </stringlist>
+        <stringlist/>
        </property>
       </widget>
      </item>
@@ -1251,7 +1260,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_stop</string>
+        <string>sig://${name}_north_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1277,7 +1286,13 @@ border-radius: 0px;
         <string>Home</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom.do_calib</string>
+        <string>sig://${name}_bottom_do_calib</string>
+       </property>
+       <property name="pressValue" stdset="0">
+        <string>1</string>
+       </property>
+       <property name="writeWhenRelease" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1292,11 +1307,17 @@ border-radius: 0px;
        <property name="toolTip">
         <string/>
        </property>
+       <property name="precision" stdset="0">
+        <number>5</number>
+       </property>
        <property name="showUnits" stdset="0">
         <bool>true</bool>
        </property>
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_rbv</string>
+        <string>sig://${name}_north_rbv</string>
        </property>
       </widget>
      </item>
@@ -1306,7 +1327,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_lls</string>
+        <string>sig://${name}_north_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1334,11 +1355,17 @@ border-radius: 0px;
        <property name="toolTip">
         <string/>
        </property>
+       <property name="precision" stdset="0">
+        <number>5</number>
+       </property>
        <property name="showUnits" stdset="0">
         <bool>true</bool>
        </property>
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_rbv</string>
+        <string>sig://${name}_top_rbv</string>
        </property>
       </widget>
      </item>
@@ -1354,7 +1381,7 @@ border-radius: 0px;
         <string>Stop</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_stop</string>
+        <string>sig://${name}_top_stop</string>
        </property>
        <property name="pressValue" stdset="0">
         <string>1</string>
@@ -1367,7 +1394,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south_hls</string>
+        <string>sig://${name}_south_hls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1393,9 +1420,7 @@ border-radius: 0px;
         <string>Expert</string>
        </property>
        <property name="commands" stdset="0">
-        <stringlist>
-         <string>typhos &quot;pcdsdevices.epics_motor.BeckhoffAxis[{'prefix':'${prefix}:MMS:NORTH','name':'${name}_north'}]&quot;</string>
-        </stringlist>
+        <stringlist/>
        </property>
       </widget>
      </item>
@@ -1415,7 +1440,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_lls</string>
+        <string>sig://${name}_top_lls</string>
        </property>
        <property name="onColor" stdset="0">
         <color>
@@ -1443,11 +1468,17 @@ border-radius: 0px;
        <property name="toolTip">
         <string/>
        </property>
+       <property name="precision" stdset="0">
+        <number>5</number>
+       </property>
        <property name="showUnits" stdset="0">
         <bool>true</bool>
        </property>
+       <property name="precisionFromPV" stdset="0">
+        <bool>false</bool>
+       </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_rbv</string>
+        <string>sig://${name}_bottom_rbv</string>
        </property>
       </widget>
      </item>
@@ -1479,7 +1510,7 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_val</string>
+        <string>sig://${name}_north_val</string>
        </property>
       </widget>
      </item>
@@ -1492,7 +1523,13 @@ border-radius: 0px;
         <string>Home</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north.do_calib</string>
+        <string>sig://${name}_north_do_calib</string>
+       </property>
+       <property name="pressValue" stdset="0">
+        <string>1</string>
+       </property>
+       <property name="writeWhenRelease" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1505,7 +1542,13 @@ border-radius: 0px;
         <string>Home</string>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south.do_calib</string>
+        <string>sig://${name}_south_do_calib</string>
+       </property>
+       <property name="pressValue" stdset="0">
+        <string>1</string>
+       </property>
+       <property name="writeWhenRelease" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1524,12 +1567,19 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.bottom_ready</string>
+        <string>sig://${name}_bottom_not_ready</string>
        </property>
-       <property name="offColor" stdset="0">
+       <property name="onColor" stdset="0">
         <color>
          <red>255</red>
          <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>0</red>
+         <green>255</green>
          <blue>0</blue>
         </color>
        </property>
@@ -1570,12 +1620,19 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.south_ready</string>
+        <string>sig://${name}_south_not_ready</string>
        </property>
-       <property name="offColor" stdset="0">
+       <property name="onColor" stdset="0">
         <color>
          <red>255</red>
          <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>0</red>
+         <green>255</green>
          <blue>0</blue>
         </color>
        </property>
@@ -1616,12 +1673,19 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.north_ready</string>
+        <string>sig://${name}_north_not_ready</string>
        </property>
-       <property name="offColor" stdset="0">
+       <property name="onColor" stdset="0">
         <color>
          <red>255</red>
          <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>0</red>
+         <green>255</green>
          <blue>0</blue>
         </color>
        </property>
@@ -1662,12 +1726,19 @@ border-radius: 0px;
         <string/>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.top_ready</string>
+        <string>sig://${name}_top_not_ready</string>
        </property>
-       <property name="offColor" stdset="0">
+       <property name="onColor" stdset="0">
         <color>
          <red>255</red>
          <green>0</green>
+         <blue>0</blue>
+        </color>
+       </property>
+       <property name="offColor" stdset="0">
+        <color>
+         <red>0</red>
+         <green>255</green>
          <blue>0</blue>
         </color>
        </property>

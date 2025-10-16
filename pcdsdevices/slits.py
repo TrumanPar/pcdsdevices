@@ -14,6 +14,7 @@ used.
 """
 import logging
 from collections import OrderedDict
+import traceback
 
 from lightpath import LightpathState
 from ophyd import Component as Cpt
@@ -22,9 +23,12 @@ from ophyd import EpicsSignal, EpicsSignalRO
 from ophyd import FormattedComponent as FCpt
 from ophyd.ophydobj import OphydObject
 from ophyd.pv_positioner import PVPositioner
+from ophyd.pseudopos import PseudoPositioner, PseudoSingle
 from ophyd.signal import Signal, SignalRO
 from ophyd.status import Status
 from ophyd.status import wait as status_wait
+from ophyd.device import Device as OphydDevice
+from ophyd.positioner import PositionerBase
 
 from .analog_signals import FDQ
 from .areadetector.detectors import PCDSAreaDetectorTyphosTrigger
@@ -32,7 +36,7 @@ from .device import GroupDevice
 from .device import UpdateComponent as UpCpt
 from .digital_signals import J120K
 from .epics_motor import (BeckhoffAxis, BeckhoffAxisNoOffset, EpicsMotor,
-                          PCDSMotorBase, SmarAct)
+                          PCDSMotorBase, SmarAct, SmaractSlitAxis)
 from .interface import (BaseInterface, FltMvInterface, LightpathInOutCptMixin,
                         LightpathMixin, MvInterface)
 from .pmps import TwinCATStatePMPS
@@ -848,270 +852,237 @@ class JJSlits(SlitsBase):
     ycenter = Cpt(BeckhoffAxis, ':YCENTER', kind='normal')
 
 
-class SmaractSlitPositioner(FltMvInterface, PVPositioner):
-    """
-    Slit positioner that converts slit geometry to individual motor positions.
+class _SmaractSlitsHelper:
+    def move(self, position, wait=False, timeout=None, moved_cb=None, **kwargs):
+        return PositionerBase.move(self, position, timeout=timeout, moved_cb=moved_cb, **kwargs)
 
-    This replaces the PLC logic from BeckhoffSlitPositioner with Python calculations.
-    """
-
-    # Use signals for readback/setpoint since we calculate these in Python
-    readback = Cpt(Signal, kind='normal')
-    setpoint = Cpt(Signal, kind='normal')
-
-    # These will be set by the parent slit class
-    _motor_north = None
-    _motor_south = None
-    _motor_top = None
-    _motor_bottom = None
-
-    def __init__(self, prefix, *, slit_type="", **kwargs):
-        self.slit_type = slit_type
-        super().__init__(prefix, **kwargs)
-
-        # Initialize readback to current calculated position
-        self.readback.put(self._calculate_current_position())
-
-    def _calculate_current_position(self):
-        """Calculate current position based on motor readbacks"""
-        if self.slit_type == "XWIDTH":
-            # Width = distance between north and south blades
-            if self._motor_north and self._motor_south:
-                north_pos = self._motor_north.position
-                south_pos = self._motor_south.position
-                return abs(north_pos - south_pos)
-        elif self.slit_type == "YWIDTH":
-            # Height = distance between top and bottom blades
-            if self._motor_top and self._motor_bottom:
-                top_pos = self._motor_top.position
-                bottom_pos = self._motor_bottom.position
-                return abs(top_pos - bottom_pos)
-        elif self.slit_type == "XCENTER":
-            # X center = midpoint between north and south blades
-            if self._motor_north and self._motor_south:
-                north_pos = self._motor_north.position
-                south_pos = self._motor_south.position
-                return (north_pos + south_pos) / 2
-        elif self.slit_type == "YCENTER":
-            # Y center = midpoint between top and bottom blades
-            if self._motor_top and self._motor_bottom:
-                top_pos = self._motor_top.position
-                bottom_pos = self._motor_bottom.position
-                return (top_pos + bottom_pos) / 2
-        return 0.0
-
-    def _update_readback(self):
-        """Update readback signal with calculated position"""
-        current_pos = self._calculate_current_position()
-        self.readback.put(current_pos)
-
-    def _setup_move(self, position):
-        """
-        Setup and execute the move to the target position.
-
-        This is called by PVPositioner when a move is requested.
-        Returns a status object representing the move.
-        """
-        # Update our setpoint
-        self.setpoint.put(position)
-
-        # Get current geometry for all axes
-        current_xwidth = self.parent.xwidth._calculate_current_position()
-        current_ywidth = self.parent.ywidth._calculate_current_position()
-        current_xcenter = self.parent.xcenter._calculate_current_position()
-        current_ycenter = self.parent.ycenter._calculate_current_position()
-
-        # Update the parameter we're changing
-        if self.slit_type == "XWIDTH":
-            target_xwidth = position
-            target_ywidth = current_ywidth
-            target_xcenter = current_xcenter
-            target_ycenter = current_ycenter
-        elif self.slit_type == "YWIDTH":
-            target_xwidth = current_xwidth
-            target_ywidth = position
-            target_xcenter = current_xcenter
-            target_ycenter = current_ycenter
-        elif self.slit_type == "XCENTER":
-            target_xwidth = current_xwidth
-            target_ywidth = current_ywidth
-            target_xcenter = position
-            target_ycenter = current_ycenter
-        elif self.slit_type == "YCENTER":
-            target_xwidth = current_xwidth
-            target_ywidth = current_ywidth
-            target_xcenter = current_xcenter
-            target_ycenter = position
-        else:
-            raise ValueError(f"Unknown slit_type: {self.slit_type}")
-
-        # Calculate individual motor positions (replicating PLC FB_SLITS logic)
-        north_pos, south_pos, top_pos, bottom_pos = self._calculate_motor_positions(
-            target_xwidth, target_ywidth, target_xcenter, target_ycenter
-        )
-
-        # Move all motors that need to move for this axis
-        if self.slit_type in ("XWIDTH", "XCENTER"):
-            # X movement affects north/south motors
-            status_a = self._motor_north.move(north_pos, wait=False)
-            status_b = self._motor_south.move(south_pos, wait=False)
-
-            combined_status = status_a & status_b
-
-            # Add callback to update readback when move is complete
-            combined_status.add_callback(self._update_readback)
-
-            return combined_status
-
-        if self.slit_type in ("YWIDTH", "YCENTER"):
-            # Y movement affects top/bottom motors
-            status_a = self._motor_top.move(top_pos, wait=False)
-            status_b = self._motor_bottom.move(bottom_pos, wait=False)
-
-            combined_status = status_a & status_b
-
-            # Add callback to update readback when move is complete
-            combined_status.add_callback(self._update_readback)
-
-            return combined_status
-        else:
-            # No motors to move - create a finished status
-            self._update_readback()
-            status = Status()
-            status.set_finished()
-            return status
-
-    def _calculate_motor_positions(self, width_x, width_y, center_x, center_y):
-        """
-        Calculate individual motor positions from slit geometry.
-
-        This replicates the PLC FB_SLITS function block logic:
-        fPosNorthBlade := rReqCenterX + rReqApertureSizeX/2 + rEncoderOffsetNorth;
-        fPosSouthBlade := rReqCenterX - rReqApertureSizeX/2 + rEncoderOffsetSouth;
-        fPosTopBlade := rReqCenterY + rReqApertureSizeY/2 + rEncoderOffsetTop;
-        fPosBottomBlade := rReqCenterY - rReqApertureSizeY/2 + rEncoderOffsetBottom;
-        """
-        # Get offset values
-        north_offset = getattr(self.parent, 'north_offset', Signal(value=0.0)).get()
-        south_offset = getattr(self.parent, 'south_offset', Signal(value=0.0)).get()
-        top_offset = getattr(self.parent, 'top_offset', Signal(value=0.0)).get()
-        bottom_offset = getattr(self.parent, 'bottom_offset', Signal(value=0.0)).get()
-
-        # Calculate motor positions
-        north_pos = center_x + width_x/2 + north_offset
-        south_pos = center_x - width_x/2 + south_offset
-        top_pos = center_y + width_y/2 + top_offset
-        bottom_pos = center_y - width_y/2 + bottom_offset
-
-        return north_pos, south_pos, top_pos, bottom_pos
-
-    def stop(self, *, success=False):
-        """Stop all relevant motors"""
-        if self.slit_type in ("XWIDTH", "XCENTER"):
-            if self._motor_north:
-                self._motor_north.stop()
-            if self._motor_south:
-                self._motor_south.stop()
-
-        if self.slit_type in ("YWIDTH", "YCENTER"):
-            if self._motor_top:
-                self._motor_top.stop()
-            if self._motor_bottom:
-                self._motor_bottom.stop()
-
-
-class SmaractSlits(SlitsBase):
+class SmaractSlits(PseudoPositioner, _SmaractSlitsHelper, SlitsBase):
     """
     Smaract-based slit implementation.
 
     Uses individual Smaract motor IOCs instead of coordinated PLC moves.
     Replicates the BeckhoffSlits interface but with Python-based coordination.
     """
+    # Pseudo axes
+    xwidth = Cpt(PseudoSingle, egu='mm', kind='normal')
+    ywidth = Cpt(PseudoSingle, egu='mm', kind='normal')
+    xcenter = Cpt(PseudoSingle, egu='mm', kind='normal')
+    ycenter = Cpt(PseudoSingle, egu='mm', kind='normal')
 
-    # Slit positioners - use our custom Smaract positioner
-    xwidth = Cpt(SmaractSlitPositioner, '', slit_type='XWIDTH', kind='normal')
-    ywidth = Cpt(SmaractSlitPositioner, '', slit_type='YWIDTH', kind='normal')
-    xcenter = Cpt(SmaractSlitPositioner, '', slit_type='XCENTER', kind='normal')
-    ycenter = Cpt(SmaractSlitPositioner, '', slit_type='YCENTER', kind='normal')
+    # GUI command signals
+    cmd_xwidth = Cpt(Signal, value=0.0, kind='normal')
+    cmd_ywidth = Cpt(Signal, value=0.0, kind='normal')
+    cmd_xcenter = Cpt(Signal, value=0.0, kind='normal')
+    cmd_ycenter = Cpt(Signal, value=0.0, kind='normal')
 
-    # Raw motors - individual Smaract motor IOCs and their PVs
-    top = FCpt(SmarAct, '{prefix}{self._top_pv}', kind='normal')
-    top_lls = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}:LLS', kind='normal')
-    top_hls = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}:HLS', kind='normal')
-    top_rbv = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}.RBV', kind='normal')
-    top_val = FCpt(EpicsSignal, '{prefix}{self._top_pv}.VAL', kind='normal')
-    top_stop = FCpt(EpicsSignal, '{prefix}{self._top_pv}.STOP', kind='normal')
-    top_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._top_pv}.NEED_CALIB')
+    # Real axes
+    top = FCpt(SmaractSlitAxis, '{prefix}:{self._top_pv}', kind='normal')
+    top_lls = FCpt(EpicsSignalRO, '{prefix}:{self._top_pv}:LLS', kind='normal')
+    top_hls = FCpt(EpicsSignalRO, '{prefix}:{self._top_pv}:HLS', kind='normal')
+    top_rbv = FCpt(EpicsSignalRO, '{prefix}:{self._top_pv}.RBV', kind='normal')
+    top_val = FCpt(EpicsSignal, '{prefix}:{self._top_pv}.VAL', kind='normal')
+    top_stop = FCpt(EpicsSignal, '{prefix}:{self._top_pv}.STOP', kind='normal')
+    top_not_ready = FCpt(EpicsSignalRO, '{prefix}:{self._top_pv}:NEED_CALIB')
 
-    bottom = FCpt(SmarAct, '{prefix}{self._bottom_pv}', kind='normal')
-    bottom_lls = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}:LLS', kind='normal')
-    bottom_hls = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}:HLS', kind='normal')
-    bottom_rbv = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}.RBV', kind='normal')
-    bottom_val = FCpt(EpicsSignal, '{prefix}{self._bottom_pv}.VAL', kind='normal')
-    bottom_stop = FCpt(EpicsSignal, '{prefix}{self._bottom_pv}.STOP', kind='normal')
-    bottom_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._bottom_pv}.NEED_CALIB')
+    bottom = FCpt(SmaractSlitAxis, '{prefix}:{self._bottom_pv}', kind='normal')
+    bottom_lls = FCpt(EpicsSignalRO, '{prefix}:{self._bottom_pv}:LLS', kind='normal')
+    bottom_hls = FCpt(EpicsSignalRO, '{prefix}:{self._bottom_pv}:HLS', kind='normal')
+    bottom_rbv = FCpt(EpicsSignalRO, '{prefix}:{self._bottom_pv}.RBV', kind='normal')
+    bottom_val = FCpt(EpicsSignal, '{prefix}:{self._bottom_pv}.VAL', kind='normal')
+    bottom_stop = FCpt(EpicsSignal, '{prefix}:{self._bottom_pv}.STOP', kind='normal')
+    bottom_not_ready = FCpt(EpicsSignalRO, '{prefix}:{self._bottom_pv}:NEED_CALIB')
 
-    north = FCpt(SmarAct, '{prefix}{self._north_pv}', kind='normal')
-    north_lls = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}:LLS', kind='normal')
-    north_hls = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}:HLS', kind='normal')
-    north_rbv = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}.RBV', kind='normal')
-    north_val = FCpt(EpicsSignal, '{prefix}{self._north_pv}.VAL', kind='normal')
-    north_stop = FCpt(EpicsSignal, '{prefix}{self._north_pv}.STOP', kind='normal')
-    north_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._north_pv}.NEED_CALIB')
+    north = FCpt(SmaractSlitAxis, '{prefix}:{self._north_pv}', kind='normal')
+    north_lls = FCpt(EpicsSignalRO, '{prefix}:{self._north_pv}:LLS', kind='normal')
+    north_hls = FCpt(EpicsSignalRO, '{prefix}:{self._north_pv}:HLS', kind='normal')
+    north_rbv = FCpt(EpicsSignalRO, '{prefix}:{self._north_pv}.RBV', kind='normal')
+    north_val = FCpt(EpicsSignal, '{prefix}:{self._north_pv}.VAL', kind='normal')
+    north_stop = FCpt(EpicsSignal, '{prefix}:{self._north_pv}.STOP', kind='normal')
+    north_not_ready = FCpt(EpicsSignalRO, '{prefix}:{self._north_pv}:NEED_CALIB')
 
-    south = FCpt(SmarAct, '{prefix}{self._south_pv}', kind='normal')
-    south_lls = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}:LLS', kind='normal')
-    south_hls = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}:HLS', kind='normal')
-    south_rbv = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}.RBV', kind='normal')
-    south_val = FCpt(EpicsSignal, '{prefix}{self._south_pv}.VAL', kind='normal')
-    south_stop = FCpt(EpicsSignal, '{prefix}{self._south_pv}.STOP', kind='normal')
-    south_not_ready = FCpt(EpicsSignalRO, '{prefix}{self._south_pv}.NEED_CALIB')
+    south = FCpt(SmaractSlitAxis, '{prefix}:{self._south_pv}', kind='normal')
+    south_lls = FCpt(EpicsSignalRO, '{prefix}:{self._south_pv}:LLS', kind='normal')
+    south_hls = FCpt(EpicsSignalRO, '{prefix}:{self._south_pv}:HLS', kind='normal')
+    south_rbv = FCpt(EpicsSignalRO, '{prefix}:{self._south_pv}.RBV', kind='normal')
+    south_val = FCpt(EpicsSignal, '{prefix}:{self._south_pv}.VAL', kind='normal')
+    south_stop = FCpt(EpicsSignal, '{prefix}:{self._south_pv}.STOP', kind='normal')
+    south_not_ready = FCpt(EpicsSignalRO, '{prefix}:{self._south_pv}:NEED_CALIB')
 
-    # Offset parameters (equivalent to PLC encoder offsets)
-    # These can be set to calibrate the slit zero positions
+    # Offsets
     north_offset = Cpt(Signal, value=0.0, kind='config')
     south_offset = Cpt(Signal, value=0.0, kind='config')
     top_offset = Cpt(Signal, value=0.0, kind='config')
     bottom_offset = Cpt(Signal, value=0.0, kind='config')
 
-    # Component to check if we need to calibrate stages. This will disable any moves on the GUI
+    real_positioners = ('north', 'south', 'top', 'bottom')
+
+    # Helper used by MultiDerivedSignal to compute the value on get
+    def _calc_calibrated_on_get(mds, items):
+        # items is a dict: {source_signal: value}
+        vals = list(items.values())
+        if not vals or any(v is None for v in vals):
+            # If anything is missing/None, treat as "not calibrated"
+            return False
+
+        def needs_calibration(v):
+            # Normalize common EPICS numeric/string representations
+            try:
+                return int(v) != 0
+            except Exception:
+                try:
+                    return float(v) != 0.0
+                except Exception:
+                    s = str(v).strip().lower()
+                    return s not in ("0", "0.0", "false", "")
+
+        # True only if no stage reports "needs calibration"
+        return not any(needs_calibration(v) for v in vals)
+
+    # Disable motion until all stages are calibrated
     calibrated = Cpt(
         MultiDerivedSignal,
         attrs=['south_not_ready', 'north_not_ready', 'bottom_not_ready', 'top_not_ready'],
-        doc="Check if the slits need to be calibrated. If so, the GUI will disable moves until this is compelted.",
+        calculate_on_get=_calc_calibrated_on_get,
+        doc="False if any stage needs calibration and True if all are ready.",
     )
 
-    # Lightpath configuration (uses position property now instead of readback)
-    lightpath_cpts = ['xwidth.position', 'ywidth.position']
+    lightpath_cpts = ['xwidth', 'ywidth']
 
-    def __init__(self, prefix, *, name, north_pv, south_pv, top_pv, bottom_pv, **kwargs):
-        super().__init__(prefix, name=name, nominal_aperture=3, **kwargs)
-
+    def __init__(self, prefix, *, name=None, north_pv, south_pv, top_pv, bottom_pv, **kwargs):
         self._north_pv = north_pv
         self._south_pv = south_pv
         self._top_pv = top_pv
         self._bottom_pv = bottom_pv
 
-        # Link motors to all positioners so they can calculate positions
-        for positioner in [self.xwidth, self.ywidth, self.xcenter, self.ycenter]:
-            positioner._motor_north = self.north
-            positioner._motor_south = self.south
-            positioner._motor_top = self.top
-            positioner._motor_bottom = self.bottom
+        super().__init__(prefix, name=name, nominal_aperture=3, **kwargs)
 
-        # Set up convenience aliases (matching BeckhoffSlits)
+        # Subscribe each command signal to auto-apply immediately
+        self.cmd_xwidth.subscribe(self._cmd_xwidth_changed, run=False)
+        self.cmd_ywidth.subscribe(self._cmd_ywidth_changed, run=False)
+        self.cmd_xcenter.subscribe(self._cmd_xcenter_changed, run=False)
+        self.cmd_ycenter.subscribe(self._cmd_ycenter_changed, run=False)
+
+        # Beckhoff aliases
         self.hg = self.xwidth
         self.vg = self.ywidth
         self.ho = self.xcenter
         self.vo = self.ycenter
 
-    @calibrated.sub_value
-    def _check_calib(self) -> bool:
-        """
-        Callback to check the status of the four smaracts
 
-        Returns: bool
-        0 --> Calibration is required
-        1 --> Stages are calibrated
+    # Bypass SlitsBase.subscribe (which touches components during construction)
+    def subscribe(self, cb, event_type=None, run=True):
+        return OphydDevice.subscribe(self, cb, event_type=event_type, run=run)
+
+    # Callbacks (one per axis), converting to float and moving without blocking
+    def _cmd_xwidth_changed(self, value=None, **kwargs):
+        self._move_axis(self.xwidth, value)
+
+    def _cmd_ywidth_changed(self, value=None, **kwargs):
+        self._move_axis(self.ywidth, value)
+
+    def _cmd_xcenter_changed(self, value=None, **kwargs):
+        self._move_axis(self.xcenter, value)
+
+    def _cmd_ycenter_changed(self, value=None, **kwargs):
+        self._move_axis(self.ycenter, value)
+
+    def _move_axis(self, axis, value):
+        try:
+            v = float(value)
+        except Exception:
+            pass
+        try:
+            axis.move(v)
+            print("works")
+        except Exception as e:
+            print(f"axis.move failed for {getattr(axis, 'name', axis)} -> {v}: {e}")
+            traceback.print_exc()
+        return
+
+    # PseudoPositioner: pseudo -> real mapping
+    def forward(self, pseudo):
+        print("in forward")
+        # Fetch offsets
+        no = float(self.north_offset.get())
+        so = float(self.south_offset.get())
+        to = float(self.top_offset.get())
+        bo = float(self.bottom_offset.get())
+
+        # PLC-equivalent math (FB_SLITS)
+        north_pos = pseudo.xcenter + pseudo.xwidth / 2.0 + no
+        south_pos = pseudo.xcenter - pseudo.xwidth / 2.0 + so
+        top_pos = pseudo.ycenter + pseudo.ywidth / 2.0 + to
+        bottom_pos = pseudo.ycenter - pseudo.ywidth / 2.0 + bo
+
+        return self.RealPosition(
+            north=north_pos,
+            south=south_pos,
+            top=top_pos,
+            bottom=bottom_pos,
+        )
+
+    def inverse(self, real):
+        # Fetch offsets
+        no = float(self.north_offset.get())
+        so = float(self.south_offset.get())
+        to = float(self.top_offset.get())
+        bo = float(self.bottom_offset.get())
+
+        # Remove offsets
+        north_pos = real.north - no
+        south_pos = real.south - so
+        top_pos = real.top - to
+        bottom_pos = real.bottom - bo
+
+        # Compute pseudo coords
+        xcenter = (north_pos + south_pos) / 2.0
+        xwidth = (north_pos - south_pos)
+        ycenter = (top_pos + bottom_pos) / 2.0
+        ywidth = (top_pos - bottom_pos)
+
+        return self.PseudoPosition(
+            xcenter=xcenter,
+            ycenter=ycenter,
+            xwidth=xwidth,
+            ywidth=ywidth,
+        )
+
+    def stop(self, *, success=False):
+        # Stop the real motors; PseudoPositioner will handle statuses
+        for axis in (self.north, self.south, self.top, self.bottom):
+            try:
+                axis.stop()
+            except Exception:
+                pass
+        return Status
+"""
+
+    def move_single(self, single, pos, wait=True, timeout=None, moved_cb=None, **kwargs):
+        cur = self.PseudoPosition(
+        xwidth=float(self.xwidth.position),
+        ywidth=float(self.ywidth.position),
+        xcenter=float(self.xcenter.position),
+        ycenter=float(self.ycenter.position),
+        )
+
+        if single is self.xwidth:
+            tgt = self.PseudoPosition(
+                xwidth=float(pos),
+                ywidth=cur.ywidth,
+                xcenter=cur.xcenter,
+                ycenter=cur.ycenter,
+            )
+            return PseudoPositioner.move(self, tgt, wait=wait, timeout=timeout, moved_cb=moved_cb)
+
+        if single is self.ywidth:
+            tgt = self.PseudoPosition(
+                xwidth=cur.xwidth,
+                ywidth=float(pos),
+                xcenter=cur.xcenter,
+                ycenter=cur.ycenter,
+            )
+            return PseudoPositioner.move(self, tgt, wait=wait, timeout=timeout, moved_cb=moved_cb)
+
+        # Fall back to default behavior for center moves, etc.
+        return PseudoPositioner.move_single(self, single, pos, wait=wait, timeout=timeout, moved_cb=moved_cb, **kwargs)
         """
-        return not self.top_not_ready or not self.bottom_not_ready or not self.south_not_ready or not self.north_not_ready
