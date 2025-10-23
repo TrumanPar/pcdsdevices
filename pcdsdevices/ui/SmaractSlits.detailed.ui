@@ -630,7 +630,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.xcenter.readback</string>
+        <string/>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -754,7 +754,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.ywidth.readback</string>
+        <string/>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -797,7 +797,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.xwidth.readback</string>
+        <string/>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>
@@ -840,7 +840,7 @@ border-radius: 0px;
         <bool>false</bool>
        </property>
        <property name="channel" stdset="0">
-        <string>sig://${name}.ycenter.readback</string>
+        <string/>
        </property>
        <property name="displayFormat" stdset="0">
         <enum>PyDMLabel::Decimal</enum>

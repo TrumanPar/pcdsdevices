@@ -1,6 +1,6 @@
 from pydm import Display
 from os import path
-from typhos import utils, plugins
+from typhos import utils
 
 class SmaractSlitsDetailedWidget(Display, utils.TyphosBase):
     """
@@ -21,6 +21,35 @@ class SmaractSlitsDetailedWidget(Display, utils.TyphosBase):
     def add_device(self, device):
         """Typhos hook for adding a new device."""
         super().add_device(device)
+
+        def _update_pseudos(*args, **kwargs):
+            try:
+                v = self.device.xwidth.position
+                self.ui.XWidth_RBV.setText(str(f"{v:.5f}"))
+            except Exception as e:
+                print(f"Error updating xwidth: {e}")
+            try:
+                v = self.device.ywidth.position
+                self.ui.YWidth_RBV.setText(str(f"{v:.5f}"))
+            except Exception as e:
+                print(f"Error updating ywidth: {e}")
+            try:
+                v = self.device.xcenter.position
+                self.ui.XCenter_RBV.setText(str(f"{v:.5f}"))
+            except Exception as e:
+                print(f"Error updating xcenter: {e}")
+            try:
+                v = self.device.ycenter.position
+                self.ui.YCenter_RBV.setText(str(f"{v:.5f}"))
+            except Exception as e:
+                print(f"Error updating ycenter: {e}")
+
+        # Subscribe all real axes to update widgets with pseudo readbacks
+        for motor in [self.device.top, self.device.bottom, self.device.north, self.device.south]:
+            motor.user_readback.subscribe(_update_pseudos, run=False)
+
+        # Seed the initial value
+        _update_pseudos()
 
         # Link the calibrate cpt to the ready widget, and VAL widget's enabled bits
         self.ui.READY_INDICATOR.value = self.device.calibrated
