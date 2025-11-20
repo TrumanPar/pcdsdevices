@@ -1,4 +1,4 @@
-1380 adding a thorlab motor back to sp1k4
+1388 Add motor aliases in lens.py
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- TMOSpectrometer: add back an old motor as a new name-fzp_piranha_rot
+- N/A
 
 New Devices
 -----------
@@ -19,12 +19,12 @@ New Devices
 
 Bugfixes
 --------
-- N/A
+- `Prefocus` lens: add alias for x_motor and y_motor
 
 Maintenance
 -----------
-- tongju12
+- N/A
 
 Contributors
 ------------
-- N/A
+- carogee

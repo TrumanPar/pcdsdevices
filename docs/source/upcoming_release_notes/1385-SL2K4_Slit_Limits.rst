@@ -1,4 +1,4 @@
-1378 modify dream_motion
+1385 SL2K4_Slit_Limits
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- add tab component name and modify gas jet x and z name
+- N/A
 
 New Devices
 -----------
@@ -19,7 +19,7 @@ New Devices
 
 Bugfixes
 --------
-- N/A
+- Made a subclass of PyDMScaleIndicator to solve the issue of the blade widgets for SL2K4 "randomly" appearing completely black
 
 Maintenance
 -----------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- tongju12
+- KaushikMalapati

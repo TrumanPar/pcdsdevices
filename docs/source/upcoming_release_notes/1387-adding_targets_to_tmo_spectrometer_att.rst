@@ -1,4 +1,4 @@
-1376 add new targets
+1387 adding targets to tmo spectrometer att
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- change 'TMOSpectrometerSOLIDATTStates'target count from 5 to 9
+- Increase TMO Spectrometer Attenuator targets from 9 to 12
 
 New Devices
 -----------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
--tongju12
+- tongju12

@@ -1,4 +1,4 @@
-1379 more-lxt-offsets
+1384 qmini_gui_revamp
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- Added instrument argument to Lcls2LaserTiming which is added to user_offset PV if defined
+- QminiSpectromemter.embedded and .detailed screens now allow recoloring the graph and using file dialogs for saving spectra
 
 New Devices
 -----------
@@ -27,4 +27,4 @@ Maintenance
 
 Contributors
 ------------
-- KaushikMalapati
+- aberges-SLAC

@@ -1,4 +1,4 @@
-1373 ipm-w8-prefix
+1391 SL2K4 Slit GUI Label Fix
 #################
 
 API Breaks
@@ -19,12 +19,12 @@ New Devices
 
 Bugfixes
 --------
-- Added prefix for wave8 component of BeckhoffIntensityProfileTarget so PVs connect
+- Labels no longer clip in control room screens
 
 Maintenance
 -----------
-- N/A
+- Added labels for North/South and Top/Bottom
 
 Contributors
 ------------
-- KaushikMalapati
+- tparas

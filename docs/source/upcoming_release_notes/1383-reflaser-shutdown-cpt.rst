@@ -1,4 +1,4 @@
-1375 sl2k4-colors
+1383 reflaser-shutdown-cpt
 #################
 
 API Breaks
@@ -11,7 +11,7 @@ Library Features
 
 Device Features
 ---------------
-- N/A
+- Added component to ReflaserL2SI for laser shutdown pv
 
 New Devices
 -----------
@@ -19,7 +19,7 @@ New Devices
 
 Bugfixes
 --------
-- Swapped indicator and background colors for slits in SL2K4Slits.ui
+- N/A
 
 Maintenance
 -----------
