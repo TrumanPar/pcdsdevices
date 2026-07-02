@@ -381,6 +381,7 @@ class PIPSerial(Device):
     pnamedes = Cpt(EpicsSignal, ':PNAMEDES', kind='omitted')
     vpcname = Cpt(EpicsSignal, ':VPCNAME', kind='omitted')
 
+
 class PIPCombined(Device):
     """
     Combined PVs for Gamma QPCe pump with serial and PLC interface
