@@ -105,7 +105,7 @@ class BeckhoffJet(BaseInterface, GroupDevice):
     name : str
         A name to refer to the device.
     """
-    print("my env!!!")
+
     tab_component_names = True
 
     jet = Cpt(BeckhoffJetManipulator, ':JET', kind='normal')
