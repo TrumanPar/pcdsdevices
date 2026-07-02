@@ -385,12 +385,12 @@ class PIPCombined(Device):
     """
     Combined PVs for Gamma QPCe pump with serial and PLC interface
     """
-    imon = Cpt(EpicsSignalRO, ':IMON_RBV', kind='omitted')
-    pmon = Cpt(EpicsSignalRO, ':PMON_RBV', kind='normal')
-    vmon = Cpt(EpicsSignalRO, ':VMON_RBV', kind='normal')
-    status = Cpt(EpicsSignalRO, ':STATUS_RBV', kind='normal')
-    statuscodecl = Cpt(EpicsSignalRO, ':STATUSCODECL_RBV', kind='omitted')
-    statuscode = Cpt(EpicsSignalRO, ':STATUSCODE_RBV', kind='omitted')
+    imon = Cpt(EpicsSignalRO, ':IMON', kind='omitted')
+    pmon = Cpt(EpicsSignalRO, ':PMON', kind='normal')
+    vmon = Cpt(EpicsSignalRO, ':VMON', kind='normal')
+    status = Cpt(EpicsSignalRO, ':STATUS', kind='normal')
+    statuscodecl = Cpt(EpicsSignalRO, ':STATUSCODECL', kind='omitted')
+    statuscode = Cpt(EpicsSignalRO, ':STATUSCODE', kind='omitted')
     pumpsizedes = Cpt(EpicsSignal, ':PUMPSIZEDES', kind='omitted')
     pumpsize = Cpt(EpicsSignal, ':PUMPSIZE', kind='omitted')
     calfactordes = Cpt(EpicsSignal, ':CALFACTORDES', kind='omitted')
@@ -398,9 +398,9 @@ class PIPCombined(Device):
     aomodedes = Cpt(EpicsSignal, ':AOMODEDES', kind='omitted')
     aomode = Cpt(EpicsSignal, ':AOMODE', kind='omitted')
     statedes = Cpt(EpicsSignal, ':STATEDES', kind='omitted')
-    statemon = Cpt(EpicsSignalRO, ':STATEMON_RBV', kind='normal')
+    statemon = Cpt(EpicsSignalRO, ':STATEMON', kind='normal')
     dispdes = Cpt(EpicsSignal, ':DISPDES', kind='omitted')
-    pname = Cpt(EpicsSignalRO, ':PNAME_RBV', kind='normal')
+    pname = Cpt(EpicsSignalRO, ':PNAME', kind='normal')
     pnamedes = Cpt(EpicsSignal, ':PNAMEDES', kind='omitted')
     vpcname = Cpt(EpicsSignal, ':VPCNAME', kind='omitted')
 
