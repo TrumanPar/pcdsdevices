@@ -382,6 +382,65 @@ class PIPSerial(Device):
     vpcname = Cpt(EpicsSignal, ':VPCNAME', kind='omitted')
 
 
+class PIPCombined(Device):
+    """
+    Combined PVs for Gamma QPCe pump with serial and PLC interface
+    """
+    imon = Cpt(EpicsSignalRO, ':IMON', kind='omitted')
+    pmon = Cpt(EpicsSignalRO, ':PMON', kind='normal')
+    vmon = Cpt(EpicsSignalRO, ':VMON', kind='normal')
+    status = Cpt(EpicsSignalRO, ':STATUS', kind='normal')
+    pumpsizedes = Cpt(EpicsSignal, ':PUMPSIZEDES', kind='omitted')
+    pumpsize = Cpt(EpicsSignal, ':PUMPSIZE', kind='omitted')
+    aomodedes = Cpt(EpicsSignal, ':AOMODEDES', kind='omitted')
+    aomode = Cpt(EpicsSignal, ':AOMODE', kind='omitted')
+    statedes = Cpt(EpicsSignal, ':STATEDES', kind='omitted')
+    pname = Cpt(EpicsSignalRO, ':PNAME', kind='normal')
+    pnamedes = Cpt(EpicsSignal, ':PNAMEDES', kind='omitted')
+    vpcname = Cpt(EpicsSignal, ':VPCNAME', kind='omitted')
+
+    pressure = Cpt(EpicsSignalRO, ':PRESS_RBV', kind='hinted',
+                   doc='pressure reading')
+    high_voltage_do = Cpt(EpicsSignalRO, ':HV_DO_RBV', kind='normal',
+                          doc='high voltage digital output')
+    high_voltage_in = Cpt(EpicsSignalRO, ':HV_DI_RBV', kind='normal',
+                          doc='high voltage digital input')
+    interlock_ok = Cpt(EpicsSignalRO, ':ILK_OK_RBV', kind='normal',
+                       doc='interlock  is ok when true')
+    protection_setpoint = Cpt(EpicsSignalWithRBV, ':AT_VAC_SP', kind='config',
+                              doc='Protection/At Vacuum Setpoint')
+    setpoint_hysteresis = Cpt(EpicsSignalWithRBV, ':SP_HYS', kind='config',
+                              doc='Protection Setpoint Hysteresis')
+    pump_on_status = Cpt(EpicsSignalRO, ':HV_DI_RBV', kind='normal',
+                         doc='ion pump output state')
+    pump_state = Cpt(EpicsSignalRO, ':STATE_RBV', kind='hinted')
+    at_vac_setpoint = Cpt(EpicsSignalWithRBV, ':AT_VAC_SP', kind='omitted',
+                          doc='at vacuum set point')
+    high_voltage_switch = Cpt(EpicsSignalWithRBV, ':HV_SW', kind='config',
+                              doc='epics command to switch on the '
+                              'high voltage')
+    plc_ai_offset = Cpt(EpicsSignalRO, ':AI_Offset_RBV', kind='config',
+                        doc=('Analog input offset must match ion pump '
+                             'analog ouput offset. Default: 13'))
+    auto_on = Cpt(EpicsSignalWithRBV, ':Auto_On', kind='config',
+                  doc=('Setting to automatically turn on the ion pump when the'
+                       'reference gauge pressure is below protection '
+                       'setpoint'))
+    override_status = Cpt(EpicsSignalRO, ':OVRD_ON', kind='omitted',
+                          doc='Regional Override Status')
+    override_force_on = Cpt(EpicsSignalWithRBV, ':FORCE_START', kind='omitted',
+                            doc='Force Ion Pump to turn on')
+    qpc_name = Cpt(EpicsSignalRO, ':VPCNAME', kind='config',
+                   doc='Quad Ion Pump Controller Name')
+    qpc_pumpsize = Cpt(EpicsSignalRO, ':PUMPSIZE', kind='config',
+                       doc='Ion Pump Size (L/s)')
+    interlock_device = Cpt(EpicsSignalRO, ':ILK_DEVICE_RBV', kind='config',
+                           string=True,
+                           doc='Vacuum device used for interlocking this pump')
+    autoOn_countdown = Cpt(EpicsSignalRO, ':AutoOn_timer_RBV', kind='normal',
+                           doc='Timer count down to turn on the ion pump ')
+
+
 # factory function for IonPumps
 def IonPump(prefix, *, name, **kwargs):
     """
